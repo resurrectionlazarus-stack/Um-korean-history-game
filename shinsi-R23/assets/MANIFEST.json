@@ -1,0 +1,1764 @@
+{
+ "project": "SHINSI: SHADOW OVER HANBANDO",
+ "batches": [
+  "batch1_era1_pilot",
+  "batch2_era1_complete_and_era2_gojoseon",
+  "batch3_era2_hero_and_era3_three_kingdoms",
+  "walk_patch_era1_3",
+  "batch4_era4_goryeo_and_buddha",
+  "walk_retouch_v2",
+  "batch5_era5_joseon_2act_and_4frame_run",
+  "batch6_era6_liberation_and_era5_run5_8",
+  "r22_final_patch",
+  "r23_batch1_assets"
+ ],
+ "resolution": "1920x1080",
+ "horizonY": 670,
+ "facing": "right_3_4",
+ "batch3FileCount": 26,
+ "totalCumulativeFiles": 172,
+ "walkPatchFileCount": 7,
+ "batch4FileCount": 19,
+ "walkRetouchV2Count": 3,
+ "batch5NewFileCount": 27,
+ "batch5RetouchIncludedCount": 3,
+ "batch6FileCount": 40,
+ "r22PatchFileCount": 12,
+ "r23Batch1FileCount": 26,
+ "bossCanvas": "1024x640",
+ "bossGroundY": 600,
+ "actors": {
+  "hunter": {
+   "role": "hero",
+   "era": 1,
+   "canvas": "512x512",
+   "groundY": 470,
+   "poses": [
+    "idle",
+    "run",
+    "atk1",
+    "atk2",
+    "hit"
+   ],
+   "optionalPoses": [
+    "run2",
+    "run3",
+    "run4",
+    "run5",
+    "run6",
+    "run7",
+    "run8"
+   ],
+   "retouch": "R22 final patch: run2 원본 색감 보정본 (런타임 밝기 필터 폐지)",
+   "run": "run → run2 → … → run8 (8프레임 · 4틱씩, R23 batch1)"
+  },
+  "sangun": {
+   "role": "boss",
+   "era": 1,
+   "canvas": "1024x640",
+   "groundY": 600,
+   "poses": [
+    "idle",
+    "swipe",
+    "leap",
+    "hit"
+   ],
+   "view": 0.39,
+   "note": "R22: 원화 키를 코드 판정 키(196)에 맞춰 ×0.39 · leap(groundY null)는 bottomOpaqueY 541을 접지선으로 · master 원본 삭제"
+  },
+  "bear": {
+   "role": "midboss",
+   "era": 1,
+   "canvas": "768x640",
+   "groundY": 600,
+   "poses": [
+    "idle",
+    "swipe",
+    "charge",
+    "hit"
+   ],
+   "optionalPoses": [
+    "walk1",
+    "walk2"
+   ],
+   "retouch": "R23 batch1: walk1/walk2 지터 수정본 (발 접지 · 몸통 중심 정렬)",
+   "view": 0.275
+  },
+  "golem": {
+   "role": "boss",
+   "era": 2,
+   "canvas": "1024x640",
+   "groundY": 600,
+   "poses": [
+    "idle",
+    "smash",
+    "thunder",
+    "hit"
+   ]
+  },
+  "hero@era2": {
+   "role": "hero",
+   "era": 2,
+   "file": "hero/era2_hero_*",
+   "canvas": "512x512",
+   "groundY": 470,
+   "poses": [
+    "idle",
+    "run",
+    "atk1",
+    "atk2",
+    "hit"
+   ],
+   "optionalPoses": [
+    "run2"
+   ]
+  },
+  "hero@era3": {
+   "role": "hero",
+   "era": 3,
+   "name": "신라 대장군 김유신",
+   "file": "hero/era3_hero_*",
+   "canvas": "512x512",
+   "groundY": 470,
+   "poses": [
+    "idle",
+    "run",
+    "atk1",
+    "atk2",
+    "hit"
+   ],
+   "optionalPoses": [
+    "run2"
+   ],
+   "retouch": "R20 walk_retouch_v2: run · run2 상체 · 칼 각도 통일"
+  },
+  "gyebaek": {
+   "role": "midboss",
+   "era": 3,
+   "zone": "Z2",
+   "name": "백제 계백",
+   "canvas": "768x640",
+   "groundY": 600,
+   "poses": [
+    "idle",
+    "dash",
+    "stand",
+    "hit"
+   ]
+  },
+  "yeon": {
+   "role": "midboss",
+   "era": 3,
+   "zone": "Z3",
+   "name": "고구려 대막리지 연개소문",
+   "canvas": "768x640",
+   "groundY": 600,
+   "poses": [
+    "idle",
+    "storm",
+    "slash",
+    "hit"
+   ],
+   "view": 0.36
+  },
+  "sojeongbang": {
+   "role": "boss",
+   "era": 3,
+   "zone": "Z4",
+   "name": "당 대총관 소정방",
+   "canvas": "1024x640",
+   "groundY": 600,
+   "poses": [
+    "idle",
+    "charge",
+    "arrowfan",
+    "hit"
+   ]
+  },
+  "hero@era4": {
+   "role": "hero",
+   "era": 4,
+   "name": "고려 무신 척준경",
+   "file": "hero/era4_hero_*",
+   "canvas": "512x512",
+   "groundY": 470,
+   "poses": [
+    "idle",
+    "run",
+    "atk1",
+    "atk2",
+    "hit"
+   ],
+   "optionalPoses": [
+    "run2"
+   ]
+  },
+  "mongol": {
+   "role": "midboss",
+   "era": 4,
+   "zone": "Z3",
+   "name": "몽골 천호장",
+   "canvas": "768x640",
+   "groundY": 600,
+   "poses": [
+    "idle",
+    "charge",
+    "volley",
+    "hit"
+   ]
+  },
+  "siege": {
+   "role": "boss",
+   "era": 4,
+   "zone": "Z4",
+   "name": "침략군 철갑 공성 사령관",
+   "canvas": "1024x640",
+   "groundY": 600,
+   "poses": [
+    "idle",
+    "flame",
+    "smash",
+    "hit"
+   ]
+  },
+  "hero@era5": {
+   "role": "hero",
+   "era": 5,
+   "name": "조선 도원수 권율",
+   "file": "hero/era5_hero_*",
+   "canvas": "512x512",
+   "groundY": 470,
+   "poses": [
+    "idle",
+    "run",
+    "atk1",
+    "atk2",
+    "hit"
+   ],
+   "optionalPoses": [
+    "run2",
+    "run3",
+    "run4",
+    "run5",
+    "run6",
+    "run7",
+    "run8"
+   ],
+   "run": "run → run2 → … → run8 (8프레임 · 4틱씩, R21)"
+  },
+  "waejang": {
+   "role": "midboss",
+   "era": 5,
+   "zone": "Z2",
+   "name": "임진 왜장",
+   "canvas": "768x640",
+   "groundY": 600,
+   "poses": [
+    "idle",
+    "cone",
+    "volley",
+    "hit"
+   ],
+   "optionalPoses": [
+    "walk1",
+    "walk2"
+   ]
+  },
+  "yonggoldae": {
+   "role": "boss",
+   "era": 5,
+   "zone": "Z4",
+   "name": "청 팔기군 대장 용골대",
+   "canvas": "1024x640",
+   "groundY": 600,
+   "poses": [
+    "idle",
+    "charge",
+    "arrowfan",
+    "hit"
+   ],
+   "optionalPoses": [
+    "walk1",
+    "walk2"
+   ]
+  },
+  "hero@era6": {
+   "role": "hero",
+   "era": 6,
+   "name": "한국광복군 특무대장",
+   "file": "hero/era6_hero_*",
+   "canvas": "512x512",
+   "groundY": 470,
+   "poses": [
+    "idle",
+    "run",
+    "atk1",
+    "atk2",
+    "hit"
+   ],
+   "optionalPoses": [
+    "run2",
+    "run3",
+    "run4",
+    "run5",
+    "run6",
+    "run7",
+    "run8"
+   ],
+   "run": "run → run2 → … → run8 (8프레임 · 4틱씩)",
+   "atk": {
+    "atk1": "군도",
+    "atk2": "모젤 권총"
+   },
+   "artName": "독립군 장교",
+   "view": 0.255
+  },
+  "france": {
+   "role": "midboss",
+   "era": 6,
+   "zone": "Z2",
+   "name": "병인양요 프랑스 원정군 지휘관",
+   "canvas": "768x640",
+   "groundY": 600,
+   "poses": [
+    "idle",
+    "cone",
+    "volley",
+    "hit"
+   ],
+   "optionalPoses": [
+    "walk1",
+    "walk2"
+   ]
+  },
+  "us": {
+   "role": "midboss",
+   "era": 6,
+   "zone": "Z3",
+   "name": "신미양요 미군 상륙 지휘관",
+   "canvas": "768x640",
+   "groundY": 600,
+   "poses": [
+    "idle",
+    "cone",
+    "bombard",
+    "hit"
+   ],
+   "optionalPoses": [
+    "walk1",
+    "walk2"
+   ]
+  },
+  "mech": {
+   "role": "boss",
+   "era": 6,
+   "zone": "Z4",
+   "name": "일본제국 깃발 기갑 대장군",
+   "canvas": "1024x640",
+   "groundY": 600,
+   "poses": [
+    "idle",
+    "charge",
+    "smash",
+    "laser360",
+    "hit"
+   ],
+   "optionalPoses": [
+    "walk1",
+    "walk2"
+   ],
+   "phases": {
+    "1": "smash · charge",
+    "2": "bombard(포격 · charge 자세)",
+    "3": "laser360"
+   },
+   "retouch": "R22 final patch: hit 원화 깃발 왼쪽(등 뒤) 정렬"
+  },
+  "wiman": {
+   "role": "midboss",
+   "era": 2,
+   "zone": "Z2",
+   "key": "MB_WIMAN",
+   "name": "위만 철기 선봉장",
+   "canvas": "768x640",
+   "groundY": 600,
+   "poses": [
+    "idle",
+    "cone",
+    "lunge",
+    "hit"
+   ],
+   "optionalPoses": [
+    "walk1",
+    "walk2"
+   ],
+   "view": 0.36
+  }
+ },
+ "fx": {
+  "era4_buddha_descent": {
+   "file": "fx/era4_buddha_descent.png",
+   "canvas": "1024x1024",
+   "anchor": "center",
+   "use": "4시대 보스 철벽 결계 → 기원 2/3 통과 시 황금 부처님 강림 컷신"
+  }
+ },
+ "acts": {
+  "era5": {
+   "act1": "era5_far/mid/ground (임진왜란)",
+   "act2": "era5_act2_far/mid/ground (병자호란 겨울 설원 · Z3 진입 시 전환)",
+   "arena": "era5_arena_z4"
+  },
+  "era6": {
+   "act1": "era6_far/mid/ground",
+   "arena": "era6_arena_z4",
+   "ending": "era6_liberation_dawn (R22 교체: 1945 경성 · 태극기 4괘 교정) — 지평선(y ≤ 335) 위 하늘로만, clip 가드"
+  },
+  "era1": {
+   "mid": "era1_mid.webp (R22: 1.38MB PNG → WebP)"
+  }
+ },
+ "floorZ4": "R21: Z4 아레나는 지평선 335px(1080 기준 670) 위만 100%, 아래는 ground 100% · 경계 6~8px 페더 — 이중 겹침 0%",
+ "mobs": {
+  "canvas": "512x512",
+  "groundY": 470,
+  "poses": [
+   "idle",
+   "walk",
+   "atk"
+  ],
+  "file": "mob/era{N}_{mobKey}_{pose}.png",
+  "note": "R23 MOB_SPEC: 원화가 있으면 코드 도형 대신 원화로 그림 · 피격 = 백색 플래시 + 넉백 기울기(코드 재사용) · 없으면 코드 스프라이트 폴백",
+  "era1": [
+   "wolf",
+   "bear_mob"
+  ],
+  "era2": [
+   "pike",
+   "archer"
+  ],
+  "era3": [
+   "tang_inf",
+   "cav_archer"
+  ]
+ },
+ "files": {
+  "assets/bg/era1_arena_z4.webp": {
+   "size": "1920x1080",
+   "horizonY": 670,
+   "bytes": 242258
+  },
+  "assets/bg/era1_far.webp": {
+   "size": "1920x1080",
+   "seamlessX": true,
+   "bytes": 145350
+  },
+  "assets/bg/era1_ground.webp": {
+   "size": "1920x410",
+   "yRange": "670..1080",
+   "seamlessX": true,
+   "bytes": 97874
+  },
+  "assets/boss/era1_sangun_idle.png": {
+   "size": "1024x640",
+   "groundY": 600,
+   "bottomOpaqueY": 599,
+   "alpha": true,
+   "bytes": 556910,
+   "facing": "right"
+  },
+  "assets/boss/era1_sangun_swipe.png": {
+   "size": "1024x640",
+   "groundY": 600,
+   "bottomOpaqueY": 599,
+   "alpha": true,
+   "bytes": 548052,
+   "facing": "right"
+  },
+  "assets/boss/era1_sangun_leap.png": {
+   "size": "1024x640",
+   "groundY": null,
+   "bottomOpaqueY": 541,
+   "alpha": true,
+   "bytes": 533547,
+   "facing": "right"
+  },
+  "assets/boss/era1_sangun_hit.png": {
+   "size": "1024x640",
+   "groundY": 600,
+   "bottomOpaqueY": 599,
+   "alpha": true,
+   "bytes": 644987,
+   "facing": "right"
+  },
+  "assets/hero/era1_hunter_idle.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 219045
+  },
+  "assets/hero/era1_hunter_run.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 230253
+  },
+  "assets/hero/era1_hunter_atk1.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 232013
+  },
+  "assets/hero/era1_hunter_atk2.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 231230
+  },
+  "assets/hero/era1_hunter_hit.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 468,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 233908
+  },
+  "assets/boss/era1_bear_idle.png": {
+   "size": "768x640",
+   "groundY": 600,
+   "bottomOpaqueY": 599,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 442643
+  },
+  "assets/boss/era1_bear_swipe.png": {
+   "size": "768x640",
+   "groundY": 600,
+   "bottomOpaqueY": 598,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 458952
+  },
+  "assets/boss/era1_bear_charge.png": {
+   "size": "768x640",
+   "groundY": 600,
+   "bottomOpaqueY": 599,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 456451
+  },
+  "assets/boss/era1_bear_hit.png": {
+   "size": "768x640",
+   "groundY": 600,
+   "bottomOpaqueY": 598,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 480657
+  },
+  "assets/bg/era2_arena_z4.webp": {
+   "size": "1920x1080",
+   "horizonY": 670,
+   "bytes": 310352
+  },
+  "assets/bg/era2_far.webp": {
+   "size": "1920x1080",
+   "seamlessX": true,
+   "bytes": 159676
+  },
+  "assets/bg/era2_mid.webp": {
+   "size": "1920x1080",
+   "horizonY": 670,
+   "seamlessX": true,
+   "alpha": true,
+   "webpQuality": 95,
+   "bytes": 297536
+  },
+  "assets/bg/era2_ground.webp": {
+   "size": "1920x410",
+   "yRange": "670..1080",
+   "seamlessX": true,
+   "bytes": 126992
+  },
+  "assets/boss/era2_golem_idle.png": {
+   "size": "1024x640",
+   "groundY": 600,
+   "bottomOpaqueY": 598,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 601309
+  },
+  "assets/boss/era2_golem_smash.png": {
+   "size": "1024x640",
+   "groundY": 600,
+   "bottomOpaqueY": 598,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 634535
+  },
+  "assets/boss/era2_golem_thunder.png": {
+   "size": "1024x640",
+   "groundY": 600,
+   "bottomOpaqueY": 599,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 701880
+  },
+  "assets/boss/era2_golem_hit.png": {
+   "size": "1024x640",
+   "groundY": 600,
+   "bottomOpaqueY": 599,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 598321
+  },
+  "assets/hero/era2_hero_idle.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 205232
+  },
+  "assets/hero/era2_hero_run.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 220124
+  },
+  "assets/hero/era2_hero_atk1.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 266965
+  },
+  "assets/hero/era2_hero_atk2.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 212449
+  },
+  "assets/hero/era2_hero_hit.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 199695
+  },
+  "assets/bg/era3_arena_z4.webp": {
+   "size": "1920x1080",
+   "horizonY": 670,
+   "bytes": 264428
+  },
+  "assets/bg/era3_far.webp": {
+   "size": "1920x1080",
+   "seamlessX": true,
+   "bytes": 168908
+  },
+  "assets/bg/era3_mid.webp": {
+   "size": "1920x1080",
+   "horizonY": 670,
+   "seamlessX": true,
+   "alpha": true,
+   "webpQuality": 92,
+   "bytes": 149884
+  },
+  "assets/bg/era3_ground.webp": {
+   "size": "1920x410",
+   "yRange": "670..1080",
+   "seamlessX": true,
+   "bytes": 95964
+  },
+  "assets/hero/era3_hero_idle.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 243512
+  },
+  "assets/hero/era3_hero_run.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 241904
+  },
+  "assets/hero/era3_hero_atk1.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 264138
+  },
+  "assets/hero/era3_hero_atk2.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 288416
+  },
+  "assets/hero/era3_hero_hit.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 237342
+  },
+  "assets/boss/era3_gyebaek_idle.png": {
+   "size": "768x640",
+   "groundY": 600,
+   "bottomOpaqueY": 598,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 417811
+  },
+  "assets/boss/era3_gyebaek_dash.png": {
+   "size": "768x640",
+   "groundY": 600,
+   "bottomOpaqueY": 599,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 446206
+  },
+  "assets/boss/era3_gyebaek_stand.png": {
+   "size": "768x640",
+   "groundY": 600,
+   "bottomOpaqueY": 599,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 434695
+  },
+  "assets/boss/era3_gyebaek_hit.png": {
+   "size": "768x640",
+   "groundY": 600,
+   "bottomOpaqueY": 598,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 469711
+  },
+  "assets/boss/era3_yeon_idle.png": {
+   "size": "768x640",
+   "groundY": 600,
+   "bottomOpaqueY": 599,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 525551
+  },
+  "assets/boss/era3_yeon_storm.png": {
+   "size": "768x640",
+   "groundY": 600,
+   "bottomOpaqueY": 599,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 576442
+  },
+  "assets/boss/era3_yeon_slash.png": {
+   "size": "768x640",
+   "groundY": 600,
+   "bottomOpaqueY": 599,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 527892
+  },
+  "assets/boss/era3_yeon_hit.png": {
+   "size": "768x640",
+   "groundY": 600,
+   "bottomOpaqueY": 598,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 517436
+  },
+  "assets/boss/era3_sojeongbang_idle.png": {
+   "size": "1024x640",
+   "groundY": 600,
+   "bottomOpaqueY": 599,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 352231
+  },
+  "assets/boss/era3_sojeongbang_charge.png": {
+   "size": "1024x640",
+   "groundY": 600,
+   "bottomOpaqueY": 599,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 446447
+  },
+  "assets/boss/era3_sojeongbang_arrowfan.png": {
+   "size": "1024x640",
+   "groundY": 600,
+   "bottomOpaqueY": 599,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 441007
+  },
+  "assets/boss/era3_sojeongbang_hit.png": {
+   "size": "1024x640",
+   "groundY": 600,
+   "bottomOpaqueY": 599,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 379714
+  },
+  "assets/hero/era1_hunter_run2.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 240351
+  },
+  "assets/hero/era2_hero_run2.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 213105
+  },
+  "assets/hero/era3_hero_run2.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 237863
+  },
+  "assets/boss/era1_bear_walk1.png": {
+   "size": "768x640",
+   "groundY": 600,
+   "bottomOpaqueY": 599,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 497576
+  },
+  "assets/boss/era1_bear_walk2.png": {
+   "size": "768x640",
+   "groundY": 600,
+   "bottomOpaqueY": 599,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 498008
+  },
+  "assets/bg/era4_arena_z4.webp": {
+   "size": "1920x1080",
+   "horizonY": 670,
+   "bytes": 299118
+  },
+  "assets/bg/era4_far.webp": {
+   "size": "1920x1080",
+   "seamlessX": true,
+   "bytes": 146336
+  },
+  "assets/bg/era4_mid.webp": {
+   "size": "1920x1080",
+   "horizonY": 670,
+   "seamlessX": true,
+   "alpha": true,
+   "webpQuality": 92,
+   "bytes": 197182
+  },
+  "assets/bg/era4_ground.webp": {
+   "size": "1920x410",
+   "yRange": "670..1080",
+   "seamlessX": true,
+   "bytes": 114220
+  },
+  "assets/hero/era4_hero_idle.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 175023
+  },
+  "assets/hero/era4_hero_run.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 187023
+  },
+  "assets/hero/era4_hero_run2.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 181299
+  },
+  "assets/hero/era4_hero_atk1.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 203269
+  },
+  "assets/hero/era4_hero_atk2.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 239785
+  },
+  "assets/hero/era4_hero_hit.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 174135
+  },
+  "assets/boss/era4_mongol_idle.png": {
+   "size": "768x640",
+   "groundY": 600,
+   "bottomOpaqueY": 599,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 404763
+  },
+  "assets/boss/era4_mongol_charge.png": {
+   "size": "768x640",
+   "groundY": 600,
+   "bottomOpaqueY": 598,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 486938
+  },
+  "assets/boss/era4_mongol_volley.png": {
+   "size": "768x640",
+   "groundY": 600,
+   "bottomOpaqueY": 598,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 425812
+  },
+  "assets/boss/era4_mongol_hit.png": {
+   "size": "768x640",
+   "groundY": 600,
+   "bottomOpaqueY": 598,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 417663
+  },
+  "assets/boss/era4_siege_idle.png": {
+   "size": "1024x640",
+   "groundY": 600,
+   "bottomOpaqueY": 599,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 665575
+  },
+  "assets/boss/era4_siege_flame.png": {
+   "size": "1024x640",
+   "groundY": 600,
+   "bottomOpaqueY": 599,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 867372
+  },
+  "assets/boss/era4_siege_smash.png": {
+   "size": "1024x640",
+   "groundY": 600,
+   "bottomOpaqueY": 599,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 719504
+  },
+  "assets/boss/era4_siege_hit.png": {
+   "size": "1024x640",
+   "groundY": 600,
+   "bottomOpaqueY": 599,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 750482
+  },
+  "assets/fx/era4_buddha_descent.png": {
+   "size": "1024x1024",
+   "anchor": "center",
+   "alpha": true,
+   "bytes": 1464100
+  },
+  "assets/bg/era5_far.webp": {
+   "size": "1920x1080",
+   "seamlessX": true,
+   "bytes": 181586
+  },
+  "assets/bg/era5_mid.webp": {
+   "size": "1920x1080",
+   "horizonY": 670,
+   "seamlessX": true,
+   "alpha": true,
+   "webpQuality": 92,
+   "bytes": 227460
+  },
+  "assets/bg/era5_ground.webp": {
+   "size": "1920x410",
+   "yRange": "670..1080",
+   "seamlessX": true,
+   "bytes": 193274
+  },
+  "assets/bg/era5_act2_far.webp": {
+   "size": "1920x1080",
+   "seamlessX": true,
+   "bytes": 301508
+  },
+  "assets/bg/era5_act2_mid.webp": {
+   "size": "1920x1080",
+   "horizonY": 670,
+   "seamlessX": true,
+   "alpha": true,
+   "webpQuality": 92,
+   "bytes": 308356
+  },
+  "assets/bg/era5_act2_ground.webp": {
+   "size": "1920x410",
+   "yRange": "670..1080",
+   "seamlessX": true,
+   "bytes": 126702
+  },
+  "assets/bg/era5_arena_z4.webp": {
+   "size": "1920x1080",
+   "horizonY": 670,
+   "bytes": 437954
+  },
+  "assets/hero/era5_hero_idle.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 160021
+  },
+  "assets/hero/era5_hero_run.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 165914
+  },
+  "assets/hero/era5_hero_run2.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 167832
+  },
+  "assets/hero/era5_hero_run3.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 160336
+  },
+  "assets/hero/era5_hero_run4.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 158697
+  },
+  "assets/hero/era5_hero_atk1.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 212654
+  },
+  "assets/hero/era5_hero_atk2.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 238540
+  },
+  "assets/hero/era5_hero_hit.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 173941
+  },
+  "assets/boss/era5_waejang_idle.png": {
+   "size": "768x640",
+   "groundY": 600,
+   "bottomOpaqueY": 599,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 366688
+  },
+  "assets/boss/era5_waejang_walk1.png": {
+   "size": "768x640",
+   "groundY": 600,
+   "bottomOpaqueY": 599,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 371260
+  },
+  "assets/boss/era5_waejang_walk2.png": {
+   "size": "768x640",
+   "groundY": 600,
+   "bottomOpaqueY": 598,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 362783
+  },
+  "assets/boss/era5_waejang_cone.png": {
+   "size": "768x640",
+   "groundY": 600,
+   "bottomOpaqueY": 598,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 446692
+  },
+  "assets/boss/era5_waejang_volley.png": {
+   "size": "768x640",
+   "groundY": 600,
+   "bottomOpaqueY": 599,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 375631
+  },
+  "assets/boss/era5_waejang_hit.png": {
+   "size": "768x640",
+   "groundY": 600,
+   "bottomOpaqueY": 599,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 387491
+  },
+  "assets/boss/era5_yonggoldae_idle.png": {
+   "size": "1024x640",
+   "groundY": 600,
+   "bottomOpaqueY": 599,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 397057
+  },
+  "assets/boss/era5_yonggoldae_walk1.png": {
+   "size": "1024x640",
+   "groundY": 600,
+   "bottomOpaqueY": 598,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 401530
+  },
+  "assets/boss/era5_yonggoldae_walk2.png": {
+   "size": "1024x640",
+   "groundY": 600,
+   "bottomOpaqueY": 599,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 398690
+  },
+  "assets/boss/era5_yonggoldae_charge.png": {
+   "size": "1024x640",
+   "groundY": 600,
+   "bottomOpaqueY": 598,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 507906
+  },
+  "assets/boss/era5_yonggoldae_arrowfan.png": {
+   "size": "1024x640",
+   "groundY": 600,
+   "bottomOpaqueY": 599,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 446286
+  },
+  "assets/boss/era5_yonggoldae_hit.png": {
+   "size": "1024x640",
+   "groundY": 600,
+   "bottomOpaqueY": 599,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 421257
+  },
+  "assets/hero/era5_hero_run5.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 166351
+  },
+  "assets/hero/era5_hero_run6.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 165702
+  },
+  "assets/hero/era5_hero_run7.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 173249
+  },
+  "assets/hero/era5_hero_run8.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 165872
+  },
+  "assets/bg/era6_far.webp": {
+   "size": "1920x1080",
+   "seamlessX": true,
+   "bytes": 202046
+  },
+  "assets/bg/era6_mid.webp": {
+   "size": "1920x1080",
+   "horizonY": 670,
+   "seamlessX": true,
+   "alpha": true,
+   "webpQuality": 92,
+   "bytes": 174368
+  },
+  "assets/bg/era6_ground.webp": {
+   "size": "1920x410",
+   "yRange": "670..1080",
+   "seamlessX": true,
+   "bytes": 122942
+  },
+  "assets/bg/era6_arena_z4.webp": {
+   "size": "1920x1080",
+   "horizonY": 670,
+   "groundMatched1to1": true,
+   "bytes": 311494
+  },
+  "assets/bg/era6_liberation_dawn.webp": {
+   "size": "1920x1080",
+   "bytes": 340910
+  },
+  "assets/hero/era6_hero_idle.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 161099
+  },
+  "assets/hero/era6_hero_run.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 468,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 187063
+  },
+  "assets/hero/era6_hero_run2.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 174619
+  },
+  "assets/hero/era6_hero_run3.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 162645
+  },
+  "assets/hero/era6_hero_run4.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 184000
+  },
+  "assets/hero/era6_hero_run5.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 468,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 180097
+  },
+  "assets/hero/era6_hero_run6.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 175067
+  },
+  "assets/hero/era6_hero_run7.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 165426
+  },
+  "assets/hero/era6_hero_run8.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 180510
+  },
+  "assets/hero/era6_hero_atk1.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 221119
+  },
+  "assets/hero/era6_hero_atk2.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 181289
+  },
+  "assets/hero/era6_hero_hit.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 180091
+  },
+  "assets/boss/era6_france_idle.png": {
+   "size": "768x640",
+   "groundY": 600,
+   "bottomOpaqueY": 599,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 246569
+  },
+  "assets/boss/era6_france_walk1.png": {
+   "size": "768x640",
+   "groundY": 600,
+   "bottomOpaqueY": 598,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 247016
+  },
+  "assets/boss/era6_france_walk2.png": {
+   "size": "768x640",
+   "groundY": 600,
+   "bottomOpaqueY": 599,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 250870
+  },
+  "assets/boss/era6_france_cone.png": {
+   "size": "768x640",
+   "groundY": 600,
+   "bottomOpaqueY": 598,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 421310
+  },
+  "assets/boss/era6_france_volley.png": {
+   "size": "768x640",
+   "groundY": 600,
+   "bottomOpaqueY": 598,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 246221
+  },
+  "assets/boss/era6_france_hit.png": {
+   "size": "768x640",
+   "groundY": 600,
+   "bottomOpaqueY": 599,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 262081
+  },
+  "assets/boss/era6_us_idle.png": {
+   "size": "768x640",
+   "groundY": 600,
+   "bottomOpaqueY": 599,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 229638
+  },
+  "assets/boss/era6_us_walk1.png": {
+   "size": "768x640",
+   "groundY": 600,
+   "bottomOpaqueY": 599,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 240607
+  },
+  "assets/boss/era6_us_walk2.png": {
+   "size": "768x640",
+   "groundY": 600,
+   "bottomOpaqueY": 599,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 239485
+  },
+  "assets/boss/era6_us_cone.png": {
+   "size": "768x640",
+   "groundY": 600,
+   "bottomOpaqueY": 599,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 419838
+  },
+  "assets/boss/era6_us_bombard.png": {
+   "size": "768x640",
+   "groundY": 600,
+   "bottomOpaqueY": 599,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 232814
+  },
+  "assets/boss/era6_us_hit.png": {
+   "size": "768x640",
+   "groundY": 600,
+   "bottomOpaqueY": 598,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 246861
+  },
+  "assets/boss/era6_mech_idle.png": {
+   "size": "1024x640",
+   "groundY": 600,
+   "bottomOpaqueY": 599,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 353430
+  },
+  "assets/boss/era6_mech_walk1.png": {
+   "size": "1024x640",
+   "groundY": 600,
+   "bottomOpaqueY": 598,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 363990
+  },
+  "assets/boss/era6_mech_walk2.png": {
+   "size": "1024x640",
+   "groundY": 600,
+   "bottomOpaqueY": 599,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 366405
+  },
+  "assets/boss/era6_mech_charge.png": {
+   "size": "1024x640",
+   "groundY": 600,
+   "bottomOpaqueY": 598,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 515670
+  },
+  "assets/boss/era6_mech_smash.png": {
+   "size": "1024x640",
+   "groundY": 600,
+   "bottomOpaqueY": 598,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 637348
+  },
+  "assets/boss/era6_mech_laser360.png": {
+   "size": "1024x640",
+   "groundY": 600,
+   "bottomOpaqueY": 593,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 851603
+  },
+  "assets/boss/era6_mech_hit.png": {
+   "size": "1024x640",
+   "groundY": 600,
+   "bottomOpaqueY": 599,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 409508
+  },
+  "assets/bg/era1_mid.webp": {
+   "size": "1920x1080",
+   "horizonY": 670,
+   "seamlessX": true,
+   "alpha": true,
+   "bytes": 162002
+  },
+  "assets/boss/era2_wiman_idle.png": {
+   "size": "768x640",
+   "groundY": 600,
+   "bottomOpaqueY": 599,
+   "alpha": true,
+   "bytes": 334841,
+   "facing": "right"
+  },
+  "assets/boss/era2_wiman_walk1.png": {
+   "size": "768x640",
+   "groundY": 600,
+   "bottomOpaqueY": 599,
+   "alpha": true,
+   "bytes": 333447,
+   "facing": "right"
+  },
+  "assets/boss/era2_wiman_walk2.png": {
+   "size": "768x640",
+   "groundY": 600,
+   "bottomOpaqueY": 599,
+   "alpha": true,
+   "bytes": 336571,
+   "facing": "right"
+  },
+  "assets/boss/era2_wiman_cone.png": {
+   "size": "768x640",
+   "groundY": 600,
+   "bottomOpaqueY": 599,
+   "alpha": true,
+   "bytes": 410568,
+   "facing": "right"
+  },
+  "assets/boss/era2_wiman_lunge.png": {
+   "size": "768x640",
+   "groundY": 600,
+   "bottomOpaqueY": 599,
+   "alpha": true,
+   "bytes": 367665,
+   "facing": "right"
+  },
+  "assets/boss/era2_wiman_hit.png": {
+   "size": "768x640",
+   "groundY": 600,
+   "bottomOpaqueY": 599,
+   "alpha": true,
+   "bytes": 334732,
+   "facing": "right"
+  },
+  "assets/hero/era1_hunter_run3.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 216020
+  },
+  "assets/hero/era1_hunter_run4.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 189956
+  },
+  "assets/hero/era1_hunter_run5.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 234069
+  },
+  "assets/hero/era1_hunter_run6.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 233207
+  },
+  "assets/hero/era1_hunter_run7.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 230042
+  },
+  "assets/hero/era1_hunter_run8.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 194225
+  },
+  "assets/mob/era1_bear_mob_atk.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 247709
+  },
+  "assets/mob/era1_bear_mob_idle.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 272555
+  },
+  "assets/mob/era1_bear_mob_walk.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 271663
+  },
+  "assets/mob/era1_wolf_atk.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 265657
+  },
+  "assets/mob/era1_wolf_idle.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 254270
+  },
+  "assets/mob/era1_wolf_walk.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 247341
+  },
+  "assets/mob/era2_archer_atk.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 160140
+  },
+  "assets/mob/era2_archer_idle.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 151655
+  },
+  "assets/mob/era2_archer_walk.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 155438
+  },
+  "assets/mob/era2_pike_atk.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 176484
+  },
+  "assets/mob/era2_pike_idle.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 148375
+  },
+  "assets/mob/era2_pike_walk.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 151352
+  },
+  "assets/mob/era3_cav_archer_atk.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 188795
+  },
+  "assets/mob/era3_cav_archer_idle.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 185698
+  },
+  "assets/mob/era3_cav_archer_walk.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 192445
+  },
+  "assets/mob/era3_tang_inf_atk.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 228138
+  },
+  "assets/mob/era3_tang_inf_idle.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 201274
+  },
+  "assets/mob/era3_tang_inf_walk.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "bytes": 203946
+  }
+ }
+}
