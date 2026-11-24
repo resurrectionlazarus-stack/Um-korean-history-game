@@ -1,0 +1,37 @@
+// [R25] 핵심 전투 장면 6초 부하 1회 — 2시대 해모수(손에 든 용광검 T3 + 칼끝 HD 궤적 + 유물 오라) + 선녀 단비 + 원화 일반 몹 6 · Lv.5 4타 피니시 · HD 55fps+
+const { open, start, toEra } = require('./h');
+(async () => {
+  const port = process.argv[2] || 8023;
+  const { browser, page, errors } = await open(`http://127.0.0.1:${port}/index.html`);
+  await start(page);
+  await toEra(page, 2);
+  await page.waitForTimeout(1500);
+  await page.evaluate(() => {
+    const g = window.__RELIC, D = window.__RELIC_DEV, p = g.player;
+    g.enemies.length = 0; p.x = g.cameraX + 360; p.z = 430; p.facing = 1; p.invincibleTimer = 99999;
+    ['GOJO_PIKE', 'GOJO_ARCHER', 'GOJO_PIKE', 'GOJO_ARCHER', 'GOJO_PIKE', 'GOJO_ARCHER'].forEach((u, i) => D.spawnUnit(u, p.x + 90 + (i % 3) * 120, 380 + (i >> 1) * 40));
+    g.enemies.forEach((e) => { e.state = 'ACTIVE'; e.hp = e.maxHp = 1e9; }); D.setLevel(5); g.stats.relicId = 'era2_iron_sword'; g.stats.weaponTier = 3;
+  });
+  // 레벨업 3회(2 · 3 · 5) 배너가 끝난 뒤의 정상 전투 구간을 잰다
+  await page.waitForTimeout(4000);
+  const q0 = await page.evaluate(() => ({ tier: window.__RELIC.quality.tier, dpr: window.__RELIC.quality.dpr }));
+  const meas = page.evaluate(() => new Promise((res) => {
+    const g = window.__RELIC; const ts = []; const tiers = new Set(); const t0 = performance.now(); let renders = [];
+    const loop = (t) => { ts.push(t); tiers.add(g.quality.tier); if (g.perf && g.perf.last != null) renders.push(g.perf.last); if (t - t0 < 6000) requestAnimationFrame(loop); else res({ ts, tiers: [...tiers], renders, mobs: g.enemies.filter((e) => e._mobArt).length, n: g.enemies.length, hs: (g.hitStopLog || []).length, bakes: (g.glowBakeLog || []).slice(), relicHits: g.relicHits || 0, wTier: g.player._wDrawnTier, trail: g.player._wt ? g.player._wt.length : 0, fairy: Object.keys(g._assetSeen || {}).filter((k) => k.startsWith('fairy:') && g.tick - g._assetSeen[k] < 30).length }); };
+    requestAnimationFrame(loop);
+  }));
+  const t0 = Date.now();
+  while (Date.now() - t0 < 6000) { await page.keyboard.press('j'); await page.waitForTimeout(140); }
+  const m = await meas;
+  const dts = m.ts.slice(1).map((t, i) => t - m.ts[i]);
+  const secs = [];
+  for (let s = 0; s < 6; s++) secs.push(m.ts.filter((t) => t - m.ts[0] >= s * 1000 && t - m.ts[0] < (s + 1) * 1000).length);
+  const avg = 1000 * (m.ts.length - 1) / (m.ts[m.ts.length - 1] - m.ts[0]);
+  const sorted = dts.slice().sort((a, b) => a - b);
+  const p95 = sorted[Math.floor(sorted.length * 0.95)];
+  const rAvg = m.renders.reduce((a, b) => a + b, 0) / m.renders.length;
+  const res = { avgFps: +avg.toFixed(1), perSecond: secs, minSecFps: Math.min(...secs), p95FrameMs: +p95.toFixed(1), tierStart: q0.tier, tiersSeen: m.tiers, dpr: q0.dpr, renderAvgMs: +rAvg.toFixed(2), renderMaxMs: +Math.max(...m.renders).toFixed(1), artMobs: m.mobs, enemies: m.n, hitStops: m.hs, glowBakesMs: m.bakes, relicHits: m.relicHits, weaponTierDrawn: m.wTier, fairyDrawn: m.fairy, errors: errors.length };
+  console.log(JSON.stringify(res));
+  console.log(res.minSecFps >= 55 && res.tiersSeen.every((t) => t === 0) && errors.length === 0 ? 'LOAD PASS (HD 55fps+)' : 'LOAD FAIL');
+  await browser.close();
+})();
