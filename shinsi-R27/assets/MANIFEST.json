@@ -2559,8 +2559,9 @@
    "weaponDetached": true,
    "size": "512x512",
    "alpha": true,
-   "bytes": 50554,
-   "r27": "art-team r27 p1"
+   "bytes": 47694,
+   "r27": "art-team r27 p1",
+   "r27fix": "R27 핫픽스: 질주 다리 이식(새 몸 + R23 질주 다리) — 미술팀 재작업 전 임시"
   },
   "assets/hero/era1_hunter_run2.webp": {
    "groundY": 470,
@@ -2570,8 +2571,9 @@
    "weaponDetached": true,
    "size": "512x512",
    "alpha": true,
-   "bytes": 50814,
-   "r27": "art-team r27 p1"
+   "bytes": 50506,
+   "r27": "art-team r27 p1",
+   "r27fix": "R27 핫픽스: 질주 다리 이식(새 몸 + R23 질주 다리) — 미술팀 재작업 전 임시"
   },
   "assets/hero/era1_hunter_run3.webp": {
    "groundY": 470,
@@ -2581,8 +2583,9 @@
    "weaponDetached": true,
    "size": "512x512",
    "alpha": true,
-   "bytes": 50888,
-   "r27": "art-team r27 p1"
+   "bytes": 45600,
+   "r27": "art-team r27 p1",
+   "r27fix": "R27 핫픽스: 질주 다리 이식(새 몸 + R23 질주 다리) — 미술팀 재작업 전 임시"
   },
   "assets/hero/era1_hunter_run4.webp": {
    "groundY": 470,
@@ -2592,8 +2595,9 @@
    "weaponDetached": true,
    "size": "512x512",
    "alpha": true,
-   "bytes": 50992,
-   "r27": "art-team r27 p1"
+   "bytes": 43354,
+   "r27": "art-team r27 p1",
+   "r27fix": "R27 핫픽스: 질주 다리 이식(새 몸 + R23 질주 다리) — 미술팀 재작업 전 임시"
   },
   "assets/hero/era1_hunter_run5.webp": {
    "groundY": 470,
@@ -2603,8 +2607,9 @@
    "weaponDetached": true,
    "size": "512x512",
    "alpha": true,
-   "bytes": 50794,
-   "r27": "art-team r27 p1"
+   "bytes": 49516,
+   "r27": "art-team r27 p1",
+   "r27fix": "R27 핫픽스: 질주 다리 이식(새 몸 + R23 질주 다리) — 미술팀 재작업 전 임시"
   },
   "assets/hero/era1_hunter_run6.webp": {
    "groundY": 470,
@@ -2614,8 +2619,9 @@
    "weaponDetached": true,
    "size": "512x512",
    "alpha": true,
-   "bytes": 50328,
-   "r27": "art-team r27 p1"
+   "bytes": 48944,
+   "r27": "art-team r27 p1",
+   "r27fix": "R27 핫픽스: 질주 다리 이식(새 몸 + R23 질주 다리) — 미술팀 재작업 전 임시"
   },
   "assets/hero/era1_hunter_run7.webp": {
    "groundY": 470,
@@ -2625,8 +2631,9 @@
    "weaponDetached": true,
    "size": "512x512",
    "alpha": true,
-   "bytes": 51074,
-   "r27": "art-team r27 p1"
+   "bytes": 49568,
+   "r27": "art-team r27 p1",
+   "r27fix": "R27 핫픽스: 질주 다리 이식(새 몸 + R23 질주 다리) — 미술팀 재작업 전 임시"
   },
   "assets/hero/era1_hunter_run8.webp": {
    "groundY": 470,
@@ -2636,8 +2643,9 @@
    "weaponDetached": true,
    "size": "512x512",
    "alpha": true,
-   "bytes": 50714,
-   "r27": "art-team r27 p1"
+   "bytes": 42668,
+   "r27": "art-team r27 p1",
+   "r27fix": "R27 핫픽스: 질주 다리 이식(새 몸 + R23 질주 다리) — 미술팀 재작업 전 임시"
   },
   "assets/weapon/era1_t1.png": {
    "facing": "right",
@@ -2691,7 +2699,8 @@
  "r26RepaintFileCount": 82,
  "r27": {
   "p1": "R27 1차 원화 — 1시대 대사냥꾼 무기 분리 몸 22(webp) + 손에 든 무기 3(주먹도끼 · 흑요석 슴베찌르개 · 신석기 간돌도끼) · 해모수 T1 건틀릿 리터치 1 · 한 무제 면류관 리터치 6",
-  "note": "옛 대사냥꾼 PNG 12장은 webp 22장으로 대체되어 삭제. 3시대 김유신 run3~8은 이번 묶음에 없음."
+  "note": "옛 대사냥꾼 PNG 12장은 webp 22장으로 대체되어 삭제. 3시대 김유신 run3~8은 이번 묶음에 없음.",
+  "fix": "R27 핫픽스: R27 1차 대사냥꾼 질주 8장은 다리가 거의 움직이지 않아(프레임 간 다리 변화 6.7% · 두 발 위치 고정) 새 몸 윗부분 + 같은 캐릭터 R23 질주 다리를 허리천 아랫단에서 이어 붙인 임시 8장으로 교체(tools/r27/runlegs.py). 미술팀 질주 8장 재작업 요청."
  },
  "r27P1FileCount": 32
 }
