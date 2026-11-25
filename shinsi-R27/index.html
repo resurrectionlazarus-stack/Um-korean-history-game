@@ -2463,14 +2463,19 @@
     tang_inf: { era: 3, unit: "TANG_SHIELD", h: 140 },
     cav_archer: { era: 3, unit: "HORSE_ARCHER", h: 166 },
     wa_raider: { era: 3, unit: "WA_RAIDER", h: 130 },
-    khitan_inf: { era: 4, unit: "KHITAN_INF", h: 140 },
+    // [R27 2차] toned: 원본이 이미 12% 저채도 · 어두운 톤 → 굽기 톤다운 생략(이중 톤다운 방지)
+    khitan_inf: { era: 4, unit: "KHITAN_INF", h: 140, toned: true },
     mongol_rider: { era: 4, unit: "MONGOL_RIDER", h: 168 },
+    // [R27 2차] 미술팀 파일 이름 era4_mongol_cav_* = 몽골 기마 돌격병(MONGOL_RIDER)
+    mongol_cav: { era: 4, unit: "MONGOL_RIDER", h: 168, toned: true },
     wakou_sword: { era: 4, unit: "WAKOU_SWORD", h: 130 },
     jp_gunner: { era: 5, unit: "JP_GUNNER", h: 134 },
-    samurai: { era: 5, unit: "SAMURAI", h: 140 },
+    // [R27 2차] 미술팀 파일 이름 era5_gunner_* = 임진왜란 조총수(JP_GUNNER)
+    gunner: { era: 5, unit: "JP_GUNNER", h: 134, toned: true },
+    samurai: { era: 5, unit: "SAMURAI", h: 140, toned: true },
     qing_rider: { era: 5, unit: "QING_RIDER", h: 168 },
-    jp_bayonet: { era: 6, unit: "JP_BAYONET", h: 134 },
-    mg_nest: { era: 6, unit: "MG_NEST", h: 110 },
+    jp_bayonet: { era: 6, unit: "JP_BAYONET", h: 134, toned: true },
+    mg_nest: { era: 6, unit: "MG_NEST", h: 110, toned: true },
     fr_rifle: { era: 6, unit: "FR_RIFLE", h: 134 },
     fr_bayonet: { era: 6, unit: "FR_BAYONET", h: 134 },
     us_rifle: { era: 6, unit: "US_RIFLE", h: 134 },
@@ -2546,6 +2551,8 @@
         ...actorFiles(3, "boss", "sojeongbang"),
         ...mobFiles(3, "tang_inf"),
         ...mobFiles(3, "cav_archer"),
+        // [R27 2차] 4~6시대 일반 몹 6종(미술팀 파일 이름 그대로)
+        ...[[4, "khitan_inf"], [4, "mongol_cav"], [5, "gunner"], [5, "samurai"], [6, "jp_bayonet"], [6, "mg_nest"]].flatMap(([e, k]) => mobFiles(e, k)),
         ...bgFiles(4, "mid.webp"),
         ...actorFiles(4, "hero", "hero"),
         ...actorFiles(4, "boss", "mongol"),
@@ -2922,7 +2929,8 @@
       await nextFrame();
       const c = prescale(imgs[i], k);
       // [R27] 일반 몹 명도 12% ↓(굽기 때 1회 · 실행 비용 0) — 주인공이 몹 무리 위로 튀어나오게. 피격 흰 실루엣은 그대로
-      {
+      //  [R27 2차] 원본이 이미 톤다운된 몹(MOB_SPEC toned · MANIFEST tone 표식)은 건너뜀
+      if (!(spec && spec.toned) && (M.meta[poses[i]] || {}).tone !== "low_sat_dark_12pct") {
         const tx = c.getContext("2d");
         tx.globalCompositeOperation = "source-atop";
         tx.fillStyle = "rgba(0,0,0,0.12)";
@@ -7804,6 +7812,61 @@
     let noiseBuf = null;
     let muted = false;
     let voices = 0;
+    // [R27 2차] 리얼 전투 효과음(assets/sfx WAV 6종) — 첫 키 · 터치 입력(오디오 잠금 해제) 때 받아 AudioBuffer로 디코딩해 두고 바로 재생.
+    //  소리마다 동시 발음 상한(클리핑 방지) · 타격음은 피치 ±5% 흔들기 · file://이거나 받기/디코딩 실패면 기존 합성음. ?sfx=synth = 합성음만(비교용)
+    const SMP = { slashLight: "slash_light", hitHeavy: "hit_heavy", breath: "breath_finisher", parryCounter: "parry_counter", relicAwaken: "relic_awaken", killcam: "killcam_slowmo" };
+    const SMP_VOL = { slashLight: 0.7, hitHeavy: 0.75, breath: 0.75, parryCounter: 0.8, relicAwaken: 0.8, killcam: 0.8 };
+    const SMP_MAXV = { slashLight: 3, hitHeavy: 3, breath: 2, parryCounter: 2, relicAwaken: 1, killcam: 1 };
+    const SMP_JIT = { slashLight: 0.05, hitHeavy: 0.05, breath: 0.03, parryCounter: 0.02 };
+    // 샘플을 못 쓸 때의 합성음("" = 소리 없음 · 예전과 같게)
+    const SMP_FALLBACK = { slashLight: "hit", hitHeavy: "crit", breath: "", parryCounter: "counter", relicAwaken: "ult", killcam: "" };
+    const smpBuf = {};
+    const smpLive = {};
+    const smpStat = { loaded: 0, failed: 0, played: 0, capped: 0, by: {} };
+    let smpTried = false;
+    const smpOff = (() => {
+      try {
+        return location.protocol === "file:" || readQuery().get("sfx") === "synth";
+      } catch (e) {
+        return true;
+      }
+    })();
+    const loadSamples = () => {
+      if (smpTried || smpOff || !ac || typeof fetch !== "function") return;
+      smpTried = true;
+      Object.keys(SMP).forEach((key) => {
+        fetch(`assets/sfx/${SMP[key]}.wav`).then((r) => r.ok ? r.arrayBuffer() : Promise.reject(new Error(String(r.status)))).then((ab) => new Promise((res, rej) => ac.decodeAudioData(ab, res, rej))).then((b) => {
+          smpBuf[key] = b;
+          smpStat.loaded++;
+        }).catch(() => {
+          smpStat.failed++;
+        });
+      });
+    };
+    const playSample = (name) => {
+      const b = smpBuf[name];
+      if (!b) return false;
+      if ((smpLive[name] || 0) >= (SMP_MAXV[name] || 2)) {
+        smpStat.capped++;
+        return true;
+      }
+      const src = ac.createBufferSource();
+      src.buffer = b;
+      const j = SMP_JIT[name] || 0;
+      if (j) src.playbackRate.value = 1 + (Math.random() * 2 - 1) * j;
+      const gn = ac.createGain();
+      gn.gain.value = SMP_VOL[name] || 0.7;
+      src.connect(gn);
+      gn.connect(master);
+      smpLive[name] = (smpLive[name] || 0) + 1;
+      src.onended = () => {
+        smpLive[name]--;
+      };
+      src.start();
+      smpStat.played++;
+      smpStat.by[name] = (smpStat.by[name] || 0) + 1;
+      return true;
+    };
     const ensure = () => {
       if (ac) return true;
       try {
@@ -7821,6 +7884,7 @@
         noiseBuf = ac.createBuffer(1, len, ac.sampleRate);
         const d = noiseBuf.getChannelData(0);
         for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
+        loadSamples();
       } catch (e) {
         ac = null;
         return false;
@@ -7963,6 +8027,13 @@
         voices++;
         setTimeout(() => voices--, 200);
         try {
+          if (SMP[name]) {
+            if (playSample(name)) return;
+            const fb = SMP_FALLBACK[name];
+            if (!fb) return;
+            DEFS[fb]();
+            return;
+          }
           (DEFS[name] || DEFS.ui)();
         } catch (e) {
         }
@@ -7983,6 +8054,10 @@
       },
       get bgmStats() {
         return bgmSeq ? bgmSeq.stats : null;
+      },
+      // [R27 2차] 샘플 효과음 상태(검증용)
+      get sampleStats() {
+        return { ...smpStat, off: smpOff, tried: smpTried, by: { ...smpStat.by } };
       },
       get audioState() {
         return ac ? ac.state : "none";
@@ -10743,6 +10818,7 @@
       } else if (B.kind === "flash") {
         L.push({ k: "slash", t0: now, dur: 300, x: p.x, y: hy + 6, dir: p.facing, tilt: -0.04, w: power > 1 ? 9 : 6, c2: B.c2, c3: B.c3 });
       }
+      if (power > 1) sfx("breath");
       g.breathCount = (g.breathCount || 0) + 1;
     };
     // [R27] 저스트 패링 카운터 일섬 — 0.2초 슬로우 + 화면을 가로지르는 백열 일섬으로 앞쪽 적에게 반격(다음 틱에 판정)
@@ -10753,6 +10829,7 @@
       const L = g.breathFx || (g.breathFx = []);
       L.push({ k: "slash", t0: performance.now(), dur: 320, x: p.x, y: p.z - p.y - 60, dir: p.facing, tilt: -0.05, w: 10, c2: "#fde047", c3: "#fef9c3" });
       g.counterSlashes = (g.counterSlashes || 0) + 1;
+      sfx("parryCounter");
       addTimer(1, () => {
         const gg = gameRef.current;
         const pp = gg.player;
@@ -11013,7 +11090,7 @@
       spawnShards(target.x, target.z, target.y + 42, 3 * hitCount, dir);
       addLight(target.x, target.z, iy, 58, g.fx.glowHex, 0.6, 8);
       if (g.sfxHitGate <= 0) {
-        sfx(isCounter ? "counter" : dealtCrit ? "crit" : "hit");
+        sfx(isCounter ? "counter" : target === g.boss || g._comboStep >= 3 ? "hitHeavy" : g._comboStep >= 1 ? "slashLight" : dealtCrit ? "crit" : "hit");
         g.sfxHitGate = 2;
       }
       g.comboDecayTimer = 210;
@@ -11356,7 +11433,7 @@
             grabLog(g).chainHits++;
             spawnHitSpark(o.x, o.z, 50, true);
             addTrauma(0.14);
-            sfx("crit");
+            sfx("hitHeavy");
             if (T.hit.length >= 2) addDamagePopup(o.x, o.z, 90, `${T.hit.length} STRIKE!`, true, null, 0, "#fde047");
           }
         }
@@ -11508,12 +11585,14 @@
         }
         if (step >= 3) breathFX(isFinisher ? 2 : 1);
         g._bowlFin = isFinisher;
+        g._comboStep = step;
         if (cls === "AXE") {
           // [R23] 도끼: 헛스윙에도 걸리던 117~150ms 정지 제거(뻣뻣함의 원인) — 적중했을 때만 강타 규칙(3.7f + 방향 쉐이크)
           checkMeleeHitbox(150, 64, 1.25 + step * 0.35, isFinisher ? 16 : 7, isFinisher ? 13 : step === 2 ? 5 : 0, isFinisher ? 2 : 1, isFinisher || step === 3);
         } else if (cls === "SPEAR") checkMeleeHitbox(240, 30, 0.95 + step * 0.28, isFinisher ? 16 : 8, isFinisher ? 8 : 0, isFinisher ? 2 : 1, isFinisher);
         else checkMeleeHitbox(175, 62, 1 + step * 0.3, isFinisher ? 14 : 5, isFinisher ? 12.5 : step === 2 ? 6 : 0, isFinisher ? 2 : 1, isFinisher);
         g._bowlFin = false;
+        g._comboStep = 0;
       });
     };
     const triggerEraDashSkill = () => {
@@ -11948,6 +12027,7 @@
       g.flashColor = "#fde047";
       addTrauma(0.55);
       explode(b.x, b.z, 70, 1.8, "#fde047");
+      sfx("killcam");
       addDamagePopup(p.x, p.z, p.y + 96, "STAGE CLEAR!", true, `${eraObjOf().bossName} \uACA9\uD30C!`, 0, "#fde047");
       const dp = g.damagePopups[g.damagePopups.length - 1];
       if (dp && dp.text === "STAGE CLEAR!") {
@@ -12370,7 +12450,7 @@
       addShock(p.x, p.z, R.mid, 190, 24);
       addShock(p.x, p.z, R.core, 120, 16);
       addLight(p.x, p.z, 60, 150, R.aura, 1, 30);
-      sfx("ult");
+      sfx("relicAwaken");
       if (R.hidden) return;
       setRelicBanner({ key: `${id}_${g.tick}`, id, name: R.name, legend: !!R.legend, tierLabel: R.legend ? "\uC804\uC124 \uC131\uBB3C" : `TI.${Math.max(2, opt.tier || g.stats.weaponTier || 2)}`, fxName: R.fxName, note: R.note, aura: R.aura, mid: R.mid, fromIcon: opt.swap && opt.swap.fromIcon || null, swapLine: opt.swap && opt.swap.swapLine || null });
       addTimer(40, () => setCompanionBubble(`\u2728 ${R.name}\uC758 \uD798\uC774 \uAE68\uC5B4\uB0AC\uC5B4\uC694!`, 130));
@@ -13525,15 +13605,13 @@
         c2.restore();
       };
       // [R27] 수묵 · 속성 호흡 이펙트(HD) — 먹물 붓터치 · 2시대 태양 번개 · 3시대 검풍 초승달 · 6시대 백열 일섬 · 패링 카운터 일섬. 시간 기준(ms)
-      const drawBreathFx = (g) => {
+      // [R27 2차] S = 마지막 합성 뒤 HD 오버레이 컨텍스트(카메라 변환이 이미 걸려 있음)
+      const drawBreathFx = (g, S) => {
         const L = g.breathFx;
         if (!L || !L.length || PERF_OFF.particles) return;
         const now = performance.now();
         const F = frameAssets.cam;
-        screen.setTransform(F.dpr, 0, 0, F.dpr, 0, 0);
-        screen.save();
-        applyCam(screen, F);
-        screen.translate(-F.camRX, 0);
+        S.save();
         for (let i = L.length - 1; i >= 0; i--) {
           const e = L[i];
           const t = (now - e.t0) / e.dur;
@@ -13547,93 +13625,93 @@
             const tt = (now - e.t0) / 16.7;
             const x = e.x + e.vx * tt;
             const y = e.y - e.vy * tt + 0.11 * tt * tt;
-            screen.save();
-            screen.translate(x, y);
-            screen.rotate(e.rot + e.vr * tt);
-            screen.globalAlpha = Math.min(1, a * 1.6) * e.al;
-            screen.fillStyle = e.c;
+            S.save();
+            S.translate(x, y);
+            S.rotate(e.rot + e.vr * tt);
+            S.globalAlpha = Math.min(1, a * 1.6) * e.al;
+            S.fillStyle = e.c;
             const len = e.len * (0.7 + 0.5 * Math.min(1, t * 3));
             const w = e.w * (1 - t * 0.5);
-            screen.beginPath();
-            screen.moveTo(-len * 0.5, 0);
-            screen.quadraticCurveTo(-len * 0.1, -w, len * 0.5, -w * 0.25);
-            screen.quadraticCurveTo(len * 0.62, 0, len * 0.5, w * 0.3);
-            screen.quadraticCurveTo(-len * 0.05, w * 0.9, -len * 0.5, 0);
-            screen.fill();
+            S.beginPath();
+            S.moveTo(-len * 0.5, 0);
+            S.quadraticCurveTo(-len * 0.1, -w, len * 0.5, -w * 0.25);
+            S.quadraticCurveTo(len * 0.62, 0, len * 0.5, w * 0.3);
+            S.quadraticCurveTo(-len * 0.05, w * 0.9, -len * 0.5, 0);
+            S.fill();
             if (e.drop) {
-              screen.beginPath();
-              screen.arc(len * 0.68, w * 0.1, w * 0.45, 0, TAU);
-              screen.fill();
+              S.beginPath();
+              S.arc(len * 0.68, w * 0.1, w * 0.45, 0, TAU);
+              S.fill();
             }
-            screen.restore();
+            S.restore();
           } else if (e.k === "inkarc") {
             const sw = Math.min(1, t * 5.5);
             const n = 20;
             const A0 = e.a0;
             const A1 = e.a0 + (e.a1 - e.a0) * sw;
-            screen.save();
-            screen.translate(e.x, e.y);
-            screen.scale(e.dir, 1);
-            screen.rotate(e.rot);
-            screen.globalAlpha = Math.min(1, a * 1.6) * 0.92;
-            screen.fillStyle = "#07070b";
-            screen.beginPath();
+            S.save();
+            S.translate(e.x, e.y);
+            S.scale(e.dir, 1);
+            S.rotate(e.rot);
+            S.globalAlpha = Math.min(1, a * 1.6) * 0.92;
+            S.fillStyle = "#07070b";
+            S.beginPath();
             for (let k = 0; k <= n; k++) {
               const an = A0 + (A1 - A0) * k / n;
-              screen.lineTo(Math.cos(an) * e.r, Math.sin(an) * e.r);
+              S.lineTo(Math.cos(an) * e.r, Math.sin(an) * e.r);
             }
             for (let k = n; k >= 0; k--) {
               const u = k / n;
               const an = A0 + (A1 - A0) * u;
               const th = e.w * Math.pow(Math.sin(Math.PI * Math.min(1, u * 1.08)), 0.65) * (0.55 + 0.45 * sw);
-              screen.lineTo(Math.cos(an) * (e.r - th), Math.sin(an) * (e.r - th));
+              S.lineTo(Math.cos(an) * (e.r - th), Math.sin(an) * (e.r - th));
             }
-            screen.closePath();
-            screen.fill();
-            screen.globalAlpha = Math.min(1, a * 1.6) * 0.55;
-            screen.strokeStyle = "#3b3550";
-            screen.lineWidth = 1.4;
+            S.closePath();
+            S.fill();
+            S.globalAlpha = Math.min(1, a * 1.6) * 0.55;
+            S.strokeStyle = "#3b3550";
+            S.lineWidth = 1.4;
             for (let j = 1; j <= 2; j++) {
-              screen.beginPath();
-              screen.arc(0, 0, e.r - e.w * (0.25 + 0.22 * j), A0 + 0.25, Math.max(A0 + 0.26, A1 - 0.3));
-              screen.stroke();
+              S.beginPath();
+              S.arc(0, 0, e.r - e.w * (0.25 + 0.22 * j), A0 + 0.25, Math.max(A0 + 0.26, A1 - 0.3));
+              S.stroke();
             }
-            screen.restore();
+            S.restore();
           } else if (e.k === "bolt") {
-            screen.save();
-            screen.globalCompositeOperation = "lighter";
-            screen.lineJoin = "round";
+            S.save();
+            S.globalCompositeOperation = "lighter";
+            S.lineJoin = "round";
             const pts = e.pts;
             [[9, e.c2, 0.45], [3.2, e.c1, 0.95], [1.2, "#ffffff", 1]].forEach(([lw, c, al]) => {
-              screen.globalAlpha = a * al;
-              screen.strokeStyle = c;
-              screen.lineWidth = lw;
-              screen.beginPath();
-              screen.moveTo(pts[0][0], pts[0][1]);
-              for (let k = 1; k < pts.length; k++) screen.lineTo(pts[k][0], pts[k][1]);
-              screen.stroke();
+              S.globalAlpha = a * al;
+              S.strokeStyle = c;
+              S.lineWidth = lw;
+              S.beginPath();
+              S.moveTo(pts[0][0], pts[0][1]);
+              for (let k = 1; k < pts.length; k++) S.lineTo(pts[k][0], pts[k][1]);
+              S.stroke();
             });
-            screen.restore();
+            S.restore();
           } else if (e.k === "arc") {
-            screen.save();
-            screen.globalCompositeOperation = "lighter";
-            screen.translate(e.x + e.dir * 140 * t, e.y);
-            screen.scale(e.dir, 1);
+            S.save();
+            S.globalCompositeOperation = "lighter";
+            S.translate(e.x + e.dir * 140 * t, e.y);
+            S.scale(e.dir, 1);
             const r = e.r * (0.8 + 0.5 * t);
-            screen.globalAlpha = a * 0.75;
-            screen.fillStyle = e.c2;
-            screen.beginPath();
-            screen.arc(0, 0, r, -1.15, 1.15);
-            screen.arc(-r * 0.22, 0, r * 0.86, 1.05, -1.05, true);
-            screen.closePath();
-            screen.fill();
-            screen.globalAlpha = a;
-            screen.strokeStyle = e.c3;
-            screen.lineWidth = 2;
-            screen.beginPath();
-            screen.arc(0, 0, r, -1.0, 1.0);
-            screen.stroke();
-            screen.restore();
+            S.globalAlpha = a * 0.75;
+            S.fillStyle = e.c2;
+            S.beginPath();
+            S.arc(0, 0, r, -1.15, 1.15);
+            S.arc(-r * 0.22, 0, r * 0.86, 1.05, -1.05, true);
+            S.closePath();
+            S.fill();
+            S.globalAlpha = a;
+            S.strokeStyle = e.c3;
+            S.lineWidth = 2;
+            S.beginPath();
+            S.arc(0, 0, r, -1.0, 1.0);
+            S.stroke();
+            S.restore();
           } else if (e.k === "slash") {
             // 화면을 가로지르는 백열 일섬(6시대 호흡 · 저스트 패링 카운터)
             const x0 = F.camRX - 40;
@@ -13641,22 +13719,22 @@
             const grow = Math.min(1, t * 5);
             const xa = e.dir > 0 ? x0 : x1;
             const xb = xa + (x1 - x0) * grow * e.dir;
-            screen.save();
-            screen.globalCompositeOperation = "lighter";
-            screen.lineCap = "round";
+            S.save();
+            S.globalCompositeOperation = "lighter";
+            S.lineCap = "round";
             [[e.w * 3.2, e.c2, 0.35], [e.w * 1.5, e.c3, 0.55], [e.w * 0.55, "#ffffff", 1]].forEach(([lw, c, al]) => {
-              screen.globalAlpha = a * al;
-              screen.strokeStyle = c;
-              screen.lineWidth = lw * (0.6 + 0.4 * a);
-              screen.beginPath();
-              screen.moveTo(xa, e.y + e.tilt * (xa - e.x));
-              screen.lineTo(xb, e.y + e.tilt * (xb - e.x));
-              screen.stroke();
+              S.globalAlpha = a * al;
+              S.strokeStyle = c;
+              S.lineWidth = lw * (0.6 + 0.4 * a);
+              S.beginPath();
+              S.moveTo(xa, e.y + e.tilt * (xa - e.x));
+              S.lineTo(xb, e.y + e.tilt * (xb - e.x));
+              S.stroke();
             });
-            screen.restore();
+            S.restore();
           }
         }
-        screen.restore();
+        S.restore();
       };
       // [R25] 손에 든 무기 — 등급(TI.1~3) 스프라이트를 몸 원화와 같은 변환(쥔 자리 · 각도 · 손목 쪽 뒤집기)으로 얹고,
       //  실제 칼끝을 따라가는 HD 참격 궤적(동작이 바뀌는 사이는 각도 보간)을 그린다. 유물 각성 때는 옛 무기가 흰빛으로 부서지고 새 무기가 떠오른다.
@@ -14893,6 +14971,8 @@
           quizReward: () => applyMidQuizReward({ upgradeReward: { tierDelta: 1, atkBonus: 0, weaponLabel: "\uAC80\uC99D" } }),
           // [R24] 검증 훅: 시대 유물 퀴즈 열기 · 유물 각성 · 레벨 조정
           openMidQuiz: (i) => openMidQuiz(i),
+          // [R27 2차] 샘플 효과음 상태(불러온 수 · 재생 수 · 이름별)
+          sfxStats: () => sfxRef.current && sfxRef.current.sampleStats,
           awaken: (id) => awakenRelic(id),
           midQuizzes: MID_UPGRADE_QUIZZES,
           relicArts: RELIC_ARTS,
@@ -16310,6 +16390,7 @@
               });
               addTrauma(0.22);
               g.killCams = (g.killCams || 0) + 1;
+              sfx("killcam");
             }
           }
         }
@@ -18169,10 +18250,8 @@
         drawWeaponTrail(ctx, g.trailPts, g.fx);
         for (let i = 0; i < g.ribbonSlashes.length; i++) drawAdditiveRibbonSlash(ctx, g.ribbonSlashes[i]);
         if (!PERF_OFF.particles) drawParticles(ctx, g.particles, bd);
-        if (g.breathFx && g.breathFx.length) {
-          flushLo();
-          drawBreathFx(g);
-        }
+        // [R27 2차] 수묵 호흡은 마지막 합성 뒤 HD 오버레이에서(피해 숫자 아래) — 프레임당 저해상도 층 전체 합성 · 지우기 1회 절약
+        if (g.breathFx && g.breathFx.length) overlay.push((o) => drawBreathFx(g, o));
         PSM();
         drawMobShots(g);
         if (!PERF_OFF.beams) drawBossBeams(g);

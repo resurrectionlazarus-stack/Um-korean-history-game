@@ -17,7 +17,7 @@ const { open, start, toEra } = require('./h');
   const q0 = await page.evaluate(() => ({ tier: window.__RELIC.quality.tier, dpr: window.__RELIC.quality.dpr }));
   const meas = page.evaluate(() => new Promise((res) => {
     const g = window.__RELIC; const ts = []; const tiers = new Set(); const t0 = performance.now(); let renders = []; const b0 = g.breathCount || 0, w0 = g.bowlLaunches || 0;
-    const loop = (t) => { ts.push(t); tiers.add(g.quality.tier); if (g.perf && g.perf.last != null) renders.push(g.perf.last); if (t - t0 < 6000) requestAnimationFrame(loop); else res({ ts, tiers: [...tiers], renders, mobs: g.enemies.filter((e) => e._mobArt).length, n: g.enemies.length, hs: (g.hitStopLog || []).length, bakes: (g.glowBakeLog || []).slice(), relicHits: g.relicHits || 0, wTier: g.player._wDrawnTier, trail: g.player._wt ? g.player._wt.length : 0, fairy: Object.keys(g._assetSeen || {}).filter((k) => k.startsWith('fairy:') && g.tick - g._assetSeen[k] < 30).length, breaths: (g.breathCount || 0) - b0, bowls: (g.bowlLaunches || 0) - w0, ring: g.rtick - (g.ringTick || 0), flush: g.perf && g.perf.flush }); };
+    const loop = (t) => { ts.push(t); tiers.add(g.quality.tier); if (g.perf && g.perf.last != null) renders.push(g.perf.last); if (t - t0 < 6000) requestAnimationFrame(loop); else res({ ts, tiers: [...tiers], renders, mobs: g.enemies.filter((e) => e._mobArt).length, n: g.enemies.length, hs: (g.hitStopLog || []).length, bakes: (g.glowBakeLog || []).slice(), relicHits: g.relicHits || 0, wTier: g.player._wDrawnTier, trail: g.player._wt ? g.player._wt.length : 0, fairy: Object.keys(g._assetSeen || {}).filter((k) => k.startsWith('fairy:') && g.tick - g._assetSeen[k] < 30).length, breaths: (g.breathCount || 0) - b0, bowls: (g.bowlLaunches || 0) - w0, ring: g.rtick - (g.ringTick || 0), flush: g.perf && g.perf.flush, smp: window.__RELIC_DEV.sfxStats && window.__RELIC_DEV.sfxStats() }); };
     requestAnimationFrame(loop);
   }));
   const t0 = Date.now();
@@ -30,7 +30,8 @@ const { open, start, toEra } = require('./h');
   const sorted = dts.slice().sort((a, b) => a - b);
   const p95 = sorted[Math.floor(sorted.length * 0.95)];
   const rAvg = m.renders.reduce((a, b) => a + b, 0) / m.renders.length;
-  const res = { avgFps: +avg.toFixed(1), perSecond: secs, minSecFps: Math.min(...secs), p95FrameMs: +p95.toFixed(1), tierStart: q0.tier, tiersSeen: m.tiers, dpr: q0.dpr, renderAvgMs: +rAvg.toFixed(2), renderMaxMs: +Math.max(...m.renders).toFixed(1), artMobs: m.mobs, enemies: m.n, hitStops: m.hs, glowBakesMs: m.bakes, relicHits: m.relicHits, weaponTierDrawn: m.wTier, fairyDrawn: m.fairy, breathFx: m.breaths, bowlLaunches: m.bowls, ringAge: m.ring, errors: errors.length };
+  const longF = dts.map((x, i) => [+((m.ts[i + 1] - m.ts[0]) / 1000).toFixed(2), +x.toFixed(1)]).filter((x) => x[1] > 25);
+  const res = { longFrames: longF, perSecond: secs, minSecFps: Math.min(...secs), p95FrameMs: +p95.toFixed(1), tierStart: q0.tier, tiersSeen: m.tiers, dpr: q0.dpr, renderAvgMs: +rAvg.toFixed(2), renderMaxMs: +Math.max(...m.renders).toFixed(1), artMobs: m.mobs, enemies: m.n, hitStops: m.hs, glowBakesMs: m.bakes, relicHits: m.relicHits, weaponTierDrawn: m.wTier, fairyDrawn: m.fairy, breathFx: m.breaths, bowlLaunches: m.bowls, ringAge: m.ring, samples: m.smp && { loaded: m.smp.loaded, played: m.smp.played, capped: m.smp.capped }, errors: errors.length };
   console.log(JSON.stringify(res));
   console.log(res.minSecFps >= 55 && res.tiersSeen.every((t) => t === 0) && errors.length === 0 ? 'LOAD PASS (HD 55fps+)' : 'LOAD FAIL');
   await browser.close();

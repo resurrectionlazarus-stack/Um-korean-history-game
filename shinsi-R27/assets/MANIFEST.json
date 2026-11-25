@@ -16,7 +16,7 @@
  "horizonY": 670,
  "facing": "right_3_4",
  "batch3FileCount": 26,
- "totalCumulativeFiles": 172,
+ "totalCumulativeFiles": 275,
  "walkPatchFileCount": 7,
  "batch4FileCount": 19,
  "walkRetouchV2Count": 3,
@@ -2682,6 +2682,240 @@
    "bytes": 40301,
    "bladeLength": 234,
    "r27": "art-team r27 p1"
+  },
+  "assets/mob/era5_samurai_atk.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "tone": "low_sat_dark_12pct",
+   "bytes": 150917,
+   "r27": "Eras 4-6 regular mob sprite (idle/walk/atk)",
+   "r27p2": "art-team r27 p2"
+  },
+  "assets/mob/era6_mg_nest_idle.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "tone": "low_sat_dark_12pct",
+   "bytes": 160895,
+   "r27": "Eras 4-6 regular mob sprite (idle/walk/atk)",
+   "r27p2": "art-team r27 p2"
+  },
+  "assets/mob/era4_mongol_cav_idle.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "tone": "low_sat_dark_12pct",
+   "bytes": 169520,
+   "r27": "Eras 4-6 regular mob sprite (idle/walk/atk)",
+   "r27p2": "art-team r27 p2"
+  },
+  "assets/mob/era5_samurai_walk.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "tone": "low_sat_dark_12pct",
+   "bytes": 139250,
+   "r27": "Eras 4-6 regular mob sprite (idle/walk/atk)",
+   "r27p2": "art-team r27 p2"
+  },
+  "assets/mob/era4_khitan_inf_idle.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "tone": "low_sat_dark_12pct",
+   "bytes": 163250,
+   "r27": "Eras 4-6 regular mob sprite (idle/walk/atk)",
+   "r27p2": "art-team r27 p2"
+  },
+  "assets/mob/era5_gunner_atk.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "tone": "low_sat_dark_12pct",
+   "bytes": 143601,
+   "r27": "Eras 4-6 regular mob sprite (idle/walk/atk)",
+   "r27p2": "art-team r27 p2"
+  },
+  "assets/mob/era5_samurai_idle.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "tone": "low_sat_dark_12pct",
+   "bytes": 138258,
+   "r27": "Eras 4-6 regular mob sprite (idle/walk/atk)",
+   "r27p2": "art-team r27 p2"
+  },
+  "assets/mob/era6_jp_bayonet_idle.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "tone": "low_sat_dark_12pct",
+   "bytes": 140365,
+   "r27": "Eras 4-6 regular mob sprite (idle/walk/atk)",
+   "r27p2": "art-team r27 p2"
+  },
+  "assets/mob/era4_khitan_inf_atk.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "tone": "low_sat_dark_12pct",
+   "bytes": 184216,
+   "r27": "Eras 4-6 regular mob sprite (idle/walk/atk)",
+   "r27p2": "art-team r27 p2"
+  },
+  "assets/mob/era6_jp_bayonet_walk.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "tone": "low_sat_dark_12pct",
+   "bytes": 139773,
+   "r27": "Eras 4-6 regular mob sprite (idle/walk/atk)",
+   "r27p2": "art-team r27 p2"
+  },
+  "assets/mob/era5_gunner_idle.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "tone": "low_sat_dark_12pct",
+   "bytes": 132914,
+   "r27": "Eras 4-6 regular mob sprite (idle/walk/atk)",
+   "r27p2": "art-team r27 p2"
+  },
+  "assets/mob/era6_mg_nest_atk.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "tone": "low_sat_dark_12pct",
+   "bytes": 163846,
+   "r27": "Eras 4-6 regular mob sprite (idle/walk/atk)",
+   "r27p2": "art-team r27 p2"
+  },
+  "assets/mob/era4_mongol_cav_atk.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "tone": "low_sat_dark_12pct",
+   "bytes": 191864,
+   "r27": "Eras 4-6 regular mob sprite (idle/walk/atk)",
+   "r27p2": "art-team r27 p2"
+  },
+  "assets/mob/era6_mg_nest_walk.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "tone": "low_sat_dark_12pct",
+   "bytes": 160880,
+   "r27": "Eras 4-6 regular mob sprite (idle/walk/atk)",
+   "r27p2": "art-team r27 p2"
+  },
+  "assets/mob/era4_khitan_inf_walk.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "tone": "low_sat_dark_12pct",
+   "bytes": 163468,
+   "r27": "Eras 4-6 regular mob sprite (idle/walk/atk)",
+   "r27p2": "art-team r27 p2"
+  },
+  "assets/mob/era4_mongol_cav_walk.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "tone": "low_sat_dark_12pct",
+   "bytes": 195458,
+   "r27": "Eras 4-6 regular mob sprite (idle/walk/atk)",
+   "r27p2": "art-team r27 p2"
+  },
+  "assets/mob/era6_jp_bayonet_atk.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "tone": "low_sat_dark_12pct",
+   "bytes": 167806,
+   "r27": "Eras 4-6 regular mob sprite (idle/walk/atk)",
+   "r27p2": "art-team r27 p2"
+  },
+  "assets/mob/era5_gunner_walk.png": {
+   "size": "512x512",
+   "groundY": 470,
+   "bottomOpaqueY": 469,
+   "facing": "right",
+   "alpha": true,
+   "tone": "low_sat_dark_12pct",
+   "bytes": 132343,
+   "r27": "Eras 4-6 regular mob sprite (idle/walk/atk)",
+   "r27p2": "art-team r27 p2"
+  },
+  "assets/sfx/slash_light.wav": {
+   "format": "wav_22050hz_16bit_mono",
+   "bytes": 7100,
+   "r27": "Combat SFX",
+   "r27p2": "art-team r27 p2"
+  },
+  "assets/sfx/killcam_slowmo.wav": {
+   "format": "wav_22050hz_16bit_mono",
+   "bytes": 19888,
+   "r27": "Combat SFX",
+   "r27p2": "art-team r27 p2"
+  },
+  "assets/sfx/hit_heavy.wav": {
+   "format": "wav_22050hz_16bit_mono",
+   "bytes": 10628,
+   "r27": "Combat SFX",
+   "r27p2": "art-team r27 p2"
+  },
+  "assets/sfx/breath_finisher.wav": {
+   "format": "wav_22050hz_16bit_mono",
+   "bytes": 16802,
+   "r27": "Combat SFX",
+   "r27p2": "art-team r27 p2"
+  },
+  "assets/sfx/parry_counter.wav": {
+   "format": "wav_22050hz_16bit_mono",
+   "bytes": 15038,
+   "r27": "Combat SFX",
+   "r27p2": "art-team r27 p2"
+  },
+  "assets/sfx/relic_awaken.wav": {
+   "format": "wav_22050hz_16bit_mono",
+   "bytes": 24298,
+   "r27": "Combat SFX",
+   "r27p2": "art-team r27 p2"
   }
  },
  "r24HeroFileCount": 14,
@@ -2700,7 +2934,10 @@
  "r27": {
   "p1": "R27 1차 원화 — 1시대 대사냥꾼 무기 분리 몸 22(webp) + 손에 든 무기 3(주먹도끼 · 흑요석 슴베찌르개 · 신석기 간돌도끼) · 해모수 T1 건틀릿 리터치 1 · 한 무제 면류관 리터치 6",
   "note": "옛 대사냥꾼 PNG 12장은 webp 22장으로 대체되어 삭제. 3시대 김유신 run3~8은 이번 묶음에 없음.",
-  "fix": "R27 핫픽스: R27 1차 대사냥꾼 질주 8장은 다리가 거의 움직이지 않아(프레임 간 다리 변화 6.7% · 두 발 위치 고정) 새 몸 윗부분 + 같은 캐릭터 R23 질주 다리를 허리천 아랫단에서 이어 붙인 임시 8장으로 교체(tools/r27/runlegs.py). 미술팀 질주 8장 재작업 요청."
+  "fix": "R27 핫픽스: R27 1차 대사냥꾼 질주 8장은 다리가 거의 움직이지 않아(프레임 간 다리 변화 6.7% · 두 발 위치 고정) 새 몸 윗부분 + 같은 캐릭터 R23 질주 다리를 허리천 아랫단에서 이어 붙인 임시 8장으로 교체(tools/r27/runlegs.py). 미술팀 질주 8장 재작업 요청.",
+  "p2": "R27 2차 — 4~6시대 일반 몹 6종 × idle · walk · atk = 18장(원본 12% 저채도 톤 · 굽기 톤다운 생략) + 전투 효과음 WAV 6종(22.05kHz 모노). 묶음 MANIFEST는 예전 목록 기반(옛 PNG · 거신병 · 파일 없는 김유신 run3~8 항목 34개 포함)이라 통째로 쓰지 않고 새 24종만 합침."
  },
- "r27P1FileCount": 32
+ "r27P1FileCount": 32,
+ "r27P2MobFileCount": 18,
+ "r27P2SfxFileCount": 6
 }
