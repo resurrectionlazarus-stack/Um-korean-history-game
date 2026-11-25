@@ -2,7 +2,7 @@
 
 - 배포본: `dist/shinsi-R28-deploy.zip` (+ `.sha256`) · 메신저용 나눔본 `shinsi-R28-part1-code-era123.zip` · `shinsi-R28-part2-era456.zip`(각 30MB 미만, 같은 폴더에 풀면 배포본과 같음)
 - 작업 폴더: `shinsi-R28/` (R27 최신본 위에 R28 1차 반영 · index.html + assets 287종 + MANIFEST)
-- 바로 플레이: 아래 '파일'의 R28 링크(비공개 — 공유는 페이지 Share 메뉴)
+- 바로 플레이: https://claude.ai/artifact/TJufjfGbH3VWbiKekAN9rH (R28 · 비공개 — 다른 분께 보여 주려면 페이지 Share 메뉴에서 공유). R27 링크는 R27 2차 그대로 남겨 둠
 - 입력: `shinsi_r26_r28_cumulative_all.zip`(144개 — R26~R28 누적, MANIFEST상 R28 1차 20개)
 - 디자인팀 발주서: `R28-art-request.md` · 판정 이미지: `R28-screenshots/`
 
