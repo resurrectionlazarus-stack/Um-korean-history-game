@@ -26,6 +26,7 @@ main 병합과 PR 금지 · 내 말이 두 가지로 읽히면 손대기 전에 
 | 항목 | 내용 |
 |---|---|
 | 최신 빌드 | `shinsi-R36.5-2/` — index.html 23,146줄(R36 · R36.5와 같은 파일) · MANIFEST 455항목 = 디스크 455 |
+| 최신 커밋 | `02445a0`(R36.5-2 본 커밋) + 그 뒤의 문서 정리 커밋 — 브랜치 `claude/r23-attack-walk-visibility-mob-ocesrz` |
 | 가장 최근에 한 일 | R36.5-2: 무기를 쥔 손을 몸 원화의 주먹과 같은 크기 · 같은 붓 그림으로(무기 그림 9장). 코드 변경 없음 |
 | 플레이 링크 | R36.5-2 https://claude.ai/artifact/FgvndJmipef8BGKyU82Yvf · R36.5 https://claude.ai/artifact/RxAoQ8Gfhsc5fusv9hGU1d · R36 https://claude.ai/artifact/3aXmHDQY6Xp9afZoqtQAAc (모두 비공개 — 오너가 Share 메뉴로 공유) |
 | 음향 점검 페이지 | https://claude.ai/artifact/QSg43hGAD1mgJALZhnyZMT (R36 내용 · 원본 `shinsi-R36.5-2/sound-check.html` · 만드는 도구 `tools/r36/make_sound_check.py`) |

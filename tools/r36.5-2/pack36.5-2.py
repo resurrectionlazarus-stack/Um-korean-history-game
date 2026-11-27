@@ -2,10 +2,12 @@
 """R36.5-2 배포 묶음 — SHA256SUMS.txt · 전체 배포본(dist/shinsi-R36.5-2-deploy.zip) ·
 나눔 3개(공통 + 1 · 5시대 / 2 · 4시대 / 3 · 6시대 — 각 30MB 미만) ·
 바뀐 그림만(dist/shinsi-R36.5-2-changed-sprites.zip — R36.5 배포 폴더 위에 덮어쓰면 R36.5-2가 된다) ·
-새 방 인수인계 묶음(dist/shinsi-handover-R36.5-2.zip). 저장소 루트에서 실행."""
+새 방 인수인계 묶음(dist/shinsi-handover-R36.5-2.zip). 저장소 루트에서 실행.
+인자 handover를 주면 인수인계 묶음만 다시 만든다(문서만 고쳤을 때 — 전체 배포본의 체크섬을 건드리지 않게)."""
 import hashlib
 import os
 import re
+import sys
 import zipfile
 
 ROOT = "shinsi-R36.5-2"
@@ -18,6 +20,25 @@ for d, _, fs in os.walk(ROOT):
             files.append(rel)
 files.sort()
 sha = lambda p: hashlib.sha256(open(p, "rb").read()).hexdigest()
+
+
+def handover():
+    """새 방 인수인계 묶음: 문서 + 비교 이미지(저장소에도 같은 파일이 있다)."""
+    docs = ["NEXT-SESSION.md", "HANDOVER.md", "ROADMAP.md", "R36.5-2-handoff.md", "R36.5-handoff.md", "R36-handoff.md", "R36-art-request.md"]
+    out = os.path.join("dist", "shinsi-handover-R36.5-2.zip")
+    shots = sorted(os.listdir("R36.5-2-screenshots"))
+    with zipfile.ZipFile(out, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=6) as z:
+        for f in docs:
+            z.write(f, f)
+        for f in shots:
+            z.write(os.path.join("R36.5-2-screenshots", f), "R36.5-2-screenshots/" + f)
+    open(out + ".sha256", "w", encoding="utf-8", newline="\n").write(f"{sha(out)}  {os.path.basename(out)}\n")
+    print(os.path.basename(out), os.path.getsize(out), len(docs) + len(shots))
+
+
+if len(sys.argv) > 1 and sys.argv[1] == "handover":   # 문서만 고친 뒤: python3 -I tools/r36.5-2/pack36.5-2.py handover
+    handover()
+    sys.exit(0)
 with open(os.path.join(ROOT, "SHA256SUMS.txt"), "w", encoding="utf-8", newline="\n") as fh:
     for rel in files:
         fh.write(f"{sha(os.path.join(ROOT, rel))}  {rel}\n")
@@ -77,13 +98,4 @@ with zipfile.ZipFile(out, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=6
 open(out + ".sha256", "w", encoding="utf-8", newline="\n").write(f"{sha(out)}  {os.path.basename(out)}\n")
 print(os.path.basename(out), os.path.getsize(out), len(changed) + 1 + len(os.listdir("R36.5-2-screenshots")))
 
-# 새 방 인수인계 묶음: 문서 + 비교 이미지(저장소에도 같은 파일이 있다)
-docs = ["NEXT-SESSION.md", "HANDOVER.md", "ROADMAP.md", "R36.5-2-handoff.md", "R36.5-handoff.md", "R36-handoff.md", "R36-art-request.md"]
-out = os.path.join("dist", "shinsi-handover-R36.5-2.zip")
-with zipfile.ZipFile(out, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=6) as z:
-    for f in docs:
-        z.write(f, f)
-    for f in sorted(os.listdir("R36.5-2-screenshots")):
-        z.write(os.path.join("R36.5-2-screenshots", f), "R36.5-2-screenshots/" + f)
-open(out + ".sha256", "w", encoding="utf-8", newline="\n").write(f"{sha(out)}  {os.path.basename(out)}\n")
-print(os.path.basename(out), os.path.getsize(out), len(docs) + len(os.listdir("R36.5-2-screenshots")))
+handover()
