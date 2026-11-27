@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>신시 음향 점검</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+  /* 한 줄 배치: 좁은 한 단 · 버튼 격자(폭이 좁아지면 한 줄에 하나) — 게임의 먹빛 화면을 따라 어두운 쪽이 기본 */
+  :root { color-scheme: dark; --bg: #0f1218; --card: #1a1f2a; --line: #2c3444; --ink: #e8e6df; --dim: #9aa3b5; --gold: #fbbf24; --new: #38bdf8; --old: #6b7385; --code: #0b0d12;
+    --font: system-ui, -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", sans-serif; }
+  @media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) { color-scheme: light; --bg: #eef0f3; --card: #ffffff; --line: #cfd5de; --ink: #161a22; --dim: #586174; --gold: #9a5b00; --new: #0b6aa8; --old: #8a93a5; --code: #e3e7ed; } }
+  :root[data-theme="light"] { color-scheme: light; --bg: #eef0f3; --card: #ffffff; --line: #cfd5de; --ink: #161a22; --dim: #586174; --gold: #9a5b00; --new: #0b6aa8; --old: #8a93a5; --code: #e3e7ed; }
+  * { box-sizing: border-box; }
+  body { margin: 0; padding-block: 16px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); background: var(--bg); color: var(--ink); font: 15px/1.5 var(--font); }
+  main { max-width: 760px; margin: 0 auto; }
+  h1 { font-size: 20px; margin: 4px 0; color: var(--gold); text-wrap: balance; }
+  h2 { font-size: 16px; margin: 26px 0 6px; color: var(--ink); font-weight: 700; }
+  h3 { font-size: 14px; margin: 0 0 2px; font-weight: 700; }
+  p { margin: 4px 0 10px; color: var(--dim); font-size: 13px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(220px, 100%), 1fr)); gap: 8px; }
+  .row3 { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(150px, 100%), 1fr)); gap: 6px; }
+  .card { border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; margin: 8px 0; background: color-mix(in srgb, var(--card) 55%, transparent); }
+  .card p { margin: 0 0 8px; font-size: 12px; }
+  .lane { font-size: 11px; color: var(--dim); margin: 6px 0 4px; letter-spacing: .02em; }
+  button { width: 100%; min-width: 0; text-align: left; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--card); color: var(--ink); font: inherit; cursor: pointer; }
+  button small { display: block; color: var(--dim); font-size: 11px; overflow-wrap: anywhere; }
+  button.on { border-color: var(--gold); box-shadow: 0 0 0 1px var(--gold) inset; }
+  button.new { border-color: var(--new); }
+  button.old { border-color: var(--old); border-style: dashed; }
+  button:focus-visible, input:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+  button:active { transform: translateY(1px); }
+  @media (prefers-reduced-motion: reduce) { button:active { transform: none; } }
+  .row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin: 8px 0; }
+  input[type=range] { flex: 1; min-width: 160px; accent-color: var(--gold); }
+  .num { font-variant-numeric: tabular-nums; }
+  code { background: var(--code); padding: 1px 6px; border-radius: 6px; color: var(--gold); }
+</style>
+</head>
+<body>
+<main>
+<h1>신시 R35 음향 점검</h1>
+<p>버튼을 누르면 게임과 같은 볼륨 비율로 들립니다. 이번 라운드에는 타격음과 시대 음악을 새로 만들었습니다. 휴대폰 스피커로 들어 보고, 크거나 작거나 어색한 소리를 알려 주세요. 파란 테두리 = 새 소리, 점선 = 예전 소리(비교용)입니다.</p>
+
+<h2>1. 타격음 — 예전과 새 소리 비교</h2>
+<p>예전 소리는 아주 높은 음에만 힘이 몰려 '탁탁' 하고 들렸습니다. 새 소리는 휴대폰 스피커가 잘 내는 가운데 음역에 몸통을 넣었습니다.</p>
+<div id="cmp"></div>
+
+<h2>2. 연타로 들어 보기</h2>
+<p>게임에서처럼 휘두르는 바람 뒤에 타격음이 이어집니다. 앞 타는 가볍게, 마지막 타는 묵직하게.</p>
+<div class="grid">
+  <button id="cbN" type="button" class="new">칼 연타 — 새 소리<small>휙-서걱 ×3, 강타</small></button>
+  <button id="cbO" type="button" class="old">칼 연타 — 예전 소리<small>비교용</small></button>
+  <button id="rkN" type="button" class="new">둔기 연타 — 새 소리<small>부웅-쿵 ×2, 바위 강타</small></button>
+  <button id="rkO" type="button" class="old">둔기 연타 — 예전 소리<small>칼과 같은 소리였음</small></button>
+  <button id="stN" type="button" class="new">창 연타 — 새 소리<small>슉-푹 ×2, 강타</small></button>
+  <button id="flN" type="button" class="new">연참 뒤 양단<small>새 연참, 이어서 양단 막타</small></button>
+</div>
+
+<h2>3. 시대 배경음악</h2>
+<p>곡마다 전장 구간과 보스전 구간이 있습니다. 게임과 같은 방식으로 끊김 없이 반복됩니다(다른 버튼을 누르면 바뀌고, 같은 버튼을 다시 누르면 멈춤).</p>
+<div id="bgm"></div>
+<div class="row"><label for="bk">음악 세기</label><input id="bk" type="range" min="0" max="2" step="0.05" value="1"><span id="bkv" class="num">×1.00</span></div>
+<p>마음에 드는 세기를 찾으면 게임 주소 끝에 <code id="bhint">?bgm=1</code> 을 붙여 같은 세기로 플레이할 수 있습니다. <code>?bgm=synth</code> 는 예전 합성 음악으로 되돌립니다.</p>
+
+<h2>4. 환경음 루프</h2>
+<p>누르면 서로 교차하고, 다시 누르면 꺼집니다.</p>
+<div class="grid" id="amb"></div>
+<div class="row"><label for="k">환경음 세기</label><input id="k" type="range" min="0" max="2" step="0.05" value="1"><span id="kv" class="num">×1.00</span></div>
+<p>게임 주소 끝에 <code id="hint">?amb=1</code> 을 붙이면 같은 세기로 플레이합니다. <code>?amb=0</code> 은 환경음 끔입니다.</p>
+
+<h2>5. 연출 순서 · 그 밖의 효과음</h2>
+<div class="grid">
+  <button id="seqB" type="button">부처님의 가호<small>범종, 0.3초 뒤 차임</small></button>
+  <button id="seqT" type="button">번개 뒤 천둥<small>0.5초 늦게 가까운 벼락</small></button>
+  <button id="seqH" type="button">전선 보스 등장<small>뿔나팔, 이어서 최종 보스용(더 낮고 크게)</small></button>
+</div>
+<div class="grid" id="smp" style="margin-top:8px"></div>
+</main>
+<script>
+const DATA = {"snd": {"slashLight": ["slash_light", 0.7], "breath": ["breath_finisher", 0.75], "parryCounter": ["parry_counter", 0.8], "relicAwaken": ["relic_awaken", 0.8], "killcam": ["killcam_slowmo", 0.8], "missionGong": ["mission_clear_gong", 0.85], "bombBlast": ["bomb_uiyeol_blast", 0.85], "buddhaBell": ["buddha_temple_bell", 0.9], "buddhaChime": ["buddha_mystic_chime", 0.8], "cutLight1": ["cut_light_1", 0.74], "cutLight2": ["cut_light_2", 0.74], "cutLight3": ["cut_light_3", 0.74], "cutHeavy": ["cut_heavy", 0.92], "cutSever": ["cut_sever", 0.88], "cutArmor": ["cut_armor", 0.82], "cutFlurry": ["cut_flurry", 0.9], "rockHit1": ["rock_hit_1", 0.84], "rockHit2": ["rock_hit_2", 0.84], "rockHeavy": ["rock_heavy", 0.98], "rockCrush": ["rock_crush", 1], "stab1": ["stab_1", 0.78], "stab2": ["stab_2", 0.78], "whooshBlade": ["whoosh_blade", 0.3], "whooshHeavy": ["whoosh_heavy", 0.36], "dragonRoar": ["dragon_roar_slash", 0.85], "gunPistol": ["gun_pistol_crisp", 0.7], "gunRifle": ["gun_rifle_heavy", 0.85], "thunder1": ["thunder_crack_1", 0.8], "thunder2": ["thunder_roll_2", 0.75], "warHorn": ["war_horn_call", 0.62], "sliceCrisp1": ["slice_crisp_1", 0.7], "sliceCrisp2": ["slice_crisp_2", 0.7], "bladeSlash1": ["blade_slash_1", 0.7], "hitHeavy": ["hit_heavy", 0.75], "sliceSever": ["slice_flesh_sever", 0.8], "sliceFlurry": ["slice_flurry_multi", 0.75], "bladeArmor": ["blade_armor_cleave", 0.85]}, "name": {"sliceCrisp1": "예전 베기 1", "sliceCrisp2": "예전 베기 2", "bladeSlash1": "예전 4시대 베기", "hitHeavy": "예전 강타", "sliceSever": "예전 양단", "sliceFlurry": "예전 연참", "bladeArmor": "예전 갑옷 쪼개기", "cutLight1": "새 베기 1", "cutLight2": "새 베기 2", "cutLight3": "새 베기 3", "cutHeavy": "새 강타", "cutSever": "새 양단", "cutArmor": "새 쇠 울림", "cutFlurry": "새 연참", "rockHit1": "새 바위 타격 1", "rockHit2": "새 바위 타격 2", "rockHeavy": "새 바위 강타", "rockCrush": "새 내려찍기", "stab1": "새 찌르기 1", "stab2": "새 찌르기 2", "whooshBlade": "칼 바람", "whooshHeavy": "둔기 바람"}, "cmp": [["칼 — 가벼운 베기", "연타의 앞 타. 휙 → 서걱", ["sliceCrisp1", "sliceCrisp2", "bladeSlash1"], ["cutLight1", "cutLight2", "cutLight3"]], ["칼 — 강타", "연타의 마지막 타 · 큰 기술", ["hitHeavy"], ["cutHeavy"]], ["칼 — 양단 막타", "베어 넘길 때", ["sliceSever"], ["cutSever"]], ["칼 — 갑옷 · 방패", "쇠 울림", ["bladeArmor"], ["cutArmor"]], ["칼 — 연참 · 일섬", "여러 번 잇달아 베기", ["sliceFlurry"], ["cutFlurry"]], ["둔기(1시대 도끼) — 가벼운 타격", "예전에는 칼과 같은 소리였습니다", ["sliceCrisp1"], ["rockHit1", "rockHit2"]], ["둔기 — 강타 · 내려찍기", "바위가 부서지는 무게", ["hitHeavy"], ["rockHeavy", "rockCrush"]], ["창(1시대 슴베찌르개) — 찌르기", "슉 → 푹", ["sliceCrisp2"], ["stab1", "stab2"]], ["휘두르는 바람", "칼 = 휙 · 둔기 = 부웅 (예전에는 짧은 합성음)", [], ["whooshBlade", "whooshHeavy"]]], "bgm": [[1, "era1_stone_fire", "돌과 불", 0.1, 37.44, 39.64, 18.72, "뼈피리 · 돌 타악 · 통나무북 · 낮은 합창", "1 구석기 · 신석기"], [2, "era2_asadal", "아사달", 0.1, 41.7391, 43.9391, 20.8696, "훈 · 공후 · 청동 방울 · 큰북 · 제의 합창", "2 고조선"], [3, "era3_hwarang", "화랑", 0.1, 38.4, 40.6, 19.2, "가야금 · 거문고 · 대금 · 장구 · 북 (자진모리)", "3 삼국"], [4, "era4_frontline", "전선의 북소리", 0.1, 38.0952, 40.2952, 15.2381, "피리 · 해금 · 거문고 · 편종 · 범종 · 장구 (휘모리)", "4 고려"], [5, "era5_haengju", "행주의 함성", 0.1, 36.3636, 38.5636, 14.5455, "태평소 · 나발 · 꽹과리 · 장구 · 북 · 징 (대취타 + 풍물)", "5 조선"], [6, "era6_march", "광복 행진곡", 0.1, 33.1034, 35.3034, 16.5517, "군악대: 트럼펫 · 호른 · 튜바 · 피콜로 · 작은북", "6 대한제국 · 광복"]], "tail": 2.0, "smp": [["slashLight", "slash_light", 0.7, "돌진 베기"], ["breath", "breath_finisher", 0.75, "호흡 피니시"], ["parryCounter", "parry_counter", 0.8, "패링 카운터"], ["relicAwaken", "relic_awaken", 0.8, "유물 각성"], ["killcam", "killcam_slowmo", 0.8, "킬캠 슬로우"], ["missionGong", "mission_clear_gong", 0.85, "미션 성공 징"], ["bombBlast", "bomb_uiyeol_blast", 0.85, "의열단 폭탄"], ["buddhaBell", "buddha_temple_bell", 0.9, "부처님의 가호 범종"], ["buddhaChime", "buddha_mystic_chime", 0.8, "부처님의 가호 차임"], ["dragonRoar", "dragon_roar_slash", 0.85, "4시대 청룡"], ["gunPistol", "gun_pistol_crisp", 0.7, "6시대 모젤 권총"], ["gunRifle", "gun_rifle_heavy", 0.85, "6시대 소총"], ["thunder1", "thunder_crack_1", 0.8, "가까운 벼락"], ["thunder2", "thunder_roll_2", 0.75, "먼 천둥"], ["warHorn", "war_horn_call", 0.62, "전선 보스 뿔나팔"]], "amb": [["rain", "amb_rain_loop", 0.24, "폭우 — 4시대 1전선 거란"], ["blizzard", "amb_blizzard_loop", 0.28, "눈보라 — 2전선 여진 · 5시대 2막 설원(약하게)"], ["wind", "amb_wind_loop", 0.28, "황야 바람 — 3전선 몽골 · 1시대 빙하기 · 6시대 폐허(약하게)"], ["fire", "amb_fire_loop", 0.26, "화염 — 4전선 개경 · 3시대 전장(약하게)"]]};
+let ac = null, master = null;
+const buf = {};
+let cur = null, K = 1, BK = 1;
+function ensure() {
+  if (ac) { if (ac.state === "suspended") ac.resume(); return; }
+  const AC = window.AudioContext || window.webkitAudioContext;
+  ac = new AC();
+  master = ac.createGain();
+  master.gain.value = 0.5;
+  const comp = ac.createDynamicsCompressor();
+  comp.threshold.value = -16;
+  comp.ratio.value = 8;
+  master.connect(comp);
+  comp.connect(ac.destination);
+}
+function load(path) {
+  if (!buf[path]) buf[path] = fetch(path).then((r) => r.arrayBuffer()).then((ab) => new Promise((res, rej) => ac.decodeAudioData(ab, res, rej)));
+  return buf[path];
+}
+function play(file, vol, rate, delay) {
+  ensure();
+  const when = ac.currentTime + (delay || 0);
+  return load("assets/sfx/" + file + ".wav").then((b) => {
+    const s = ac.createBufferSource();
+    s.buffer = b;
+    if (rate) s.playbackRate.value = rate;
+    const g = ac.createGain();
+    g.gain.value = vol;
+    s.connect(g);
+    g.connect(master);
+    s.start(Math.max(ac.currentTime, when));
+  }).catch(() => {});
+}
+// 키(게임 속 이름)로 한 번 재생. o = { v 볼륨 배율, r 음높이, d 지연(초) }
+const one = (k, o) => play(DATA.snd[k][0], DATA.snd[k][1] * ((o && o.v) || 1), o && o.r, o && o.d);
+const mk = (cls, lab, sub) => {
+  const b = document.createElement("button");
+  b.type = "button";
+  if (cls) b.className = cls;
+  b.append(lab);
+  const sm = document.createElement("small");
+  sm.textContent = sub;
+  b.append(sm);
+  return b;
+};
+// 1. 비교
+DATA.cmp.forEach(([title, desc, olds, news]) => {
+  const c = document.createElement("div");
+  c.className = "card";
+  const h = document.createElement("h3");
+  h.textContent = title;
+  const p = document.createElement("p");
+  p.textContent = desc;
+  c.append(h, p);
+  const lane = (label, keys, cls) => {
+    if (!keys.length) return;
+    const l = document.createElement("div");
+    l.className = "lane";
+    l.textContent = label;
+    const r = document.createElement("div");
+    r.className = "row3";
+    keys.forEach((k) => {
+      const b = mk(cls, DATA.name[k] || k, DATA.snd[k][0] + ".wav");
+      b.dataset.k = k;
+      b.onclick = () => one(k);
+      r.appendChild(b);
+    });
+    c.append(l, r);
+  };
+  lane("새 소리", news, "new");
+  lane("예전 소리", olds, "old");
+  document.getElementById("cmp").appendChild(c);
+});
+// 2. 연타: [키, 시각(초), 옵션]
+const seq = (list) => { ensure(); list.forEach(([k, t, o]) => one(k, Object.assign({ d: t }, o || {}))); };
+const G = 0.36, H = 0.09;   // 타 간격 · 휘두른 뒤 맞는 순간까지
+document.getElementById("cbN").onclick = () => seq([["whooshBlade", 0], ["cutLight1", H, { v: 0.97, r: 1.01 }], ["whooshBlade", G], ["cutLight2", G + H, { v: 1.02, r: 0.99 }], ["whooshBlade", 2 * G], ["cutLight3", 2 * G + H, { v: 1.07, r: 0.97 }], ["whooshBlade", 3 * G], ["cutHeavy", 3 * G + H]]);
+document.getElementById("cbO").onclick = () => seq([["sliceCrisp1", H], ["sliceCrisp2", G + H], ["sliceCrisp1", 2 * G + H], ["hitHeavy", 3 * G + H]]);
+document.getElementById("rkN").onclick = () => seq([["whooshHeavy", 0], ["rockHit1", H, { v: 0.97, r: 1.01 }], ["whooshHeavy", G], ["rockHit2", G + H, { v: 1.02, r: 0.99 }], ["whooshHeavy", 2 * G], ["rockHeavy", 2 * G + H]]);
+document.getElementById("rkO").onclick = () => seq([["sliceCrisp1", H], ["sliceCrisp2", G + H], ["hitHeavy", 2 * G + H]]);
+document.getElementById("stN").onclick = () => seq([["whooshBlade", 0], ["stab1", H], ["whooshBlade", G], ["stab2", G + H], ["whooshBlade", 2 * G], ["cutHeavy", 2 * G + H]]);
+document.getElementById("flN").onclick = () => seq([["cutFlurry", 0], ["cutSever", 0.75]]);
+// 3. 배경음악: 표지음(파일 맨 앞의 짧은 삑)으로 시작 위치를 보정하고, 구간 길이마다 새로 겹쳐 틀어 이음매 없이 반복(게임과 같은 방식)
+let bg = null;
+const findMark = (b) => { const d = b.getChannelData(0), n = Math.min(d.length, Math.floor(b.sampleRate * 0.3)); let pv = 0, pi = 0; for (let i = 0; i < n; i++) { const v = Math.abs(d[i]); if (v > pv) { pv = v; pi = i; } } return pi / b.sampleRate; };
+function bgStop() {
+  if (!bg) return;
+  clearInterval(bg.timer);
+  const t = ac.currentTime, o = bg;
+  o.bus.gain.cancelScheduledValues(t);
+  o.bus.gain.setValueAtTime(o.bus.gain.value, t);
+  o.bus.gain.linearRampToValueAtTime(0.0001, t + 0.4);
+  setTimeout(() => { o.srcs.forEach((x) => { try { x.stop(); } catch (e) {} }); o.bus.disconnect(); }, 600);
+  if (o.btn) { o.btn.classList.remove("on"); o.btn.setAttribute("aria-pressed", "false"); }
+  bg = null;
+}
+function bgPlay(row, sec, btn) {
+  ensure();
+  const id = row[1] + sec;
+  const same = bg && bg.id === id;
+  bgStop();
+  if (same) return;
+  btn.classList.add("on");
+  btn.setAttribute("aria-pressed", "true");
+  const st = { id, btn, srcs: [], timer: null, bus: ac.createGain(), dead: false };
+  st.bus.gain.value = 0.34 * BK;
+  st.bus.connect(master);
+  bg = st;
+  load("assets/bgm/" + row[1] + ".mp3").then((b) => {
+    if (bg !== st) return;
+    const t0 = findMark(b), start = sec === "a" ? row[3] : row[5], len = sec === "a" ? row[4] : row[6];
+    let next = ac.currentTime + 0.08;
+    const pump = () => {
+      while (next < ac.currentTime + 0.7) {
+        const s = ac.createBufferSource();
+        s.buffer = b;
+        s.connect(st.bus);
+        s.start(next, t0 + start, len + DATA.tail);
+        st.srcs.push(s);
+        if (st.srcs.length > 3) st.srcs.shift();
+        next += len;
+      }
+    };
+    pump();
+    st.timer = setInterval(pump, 200);
+  }).catch(() => { if (bg === st) bgStop(); });
+}
+DATA.bgm.forEach((row) => {
+  const c = document.createElement("div");
+  c.className = "card";
+  const h = document.createElement("h3");
+  h.textContent = row[8] + " — 「" + row[2] + "」";
+  const p = document.createElement("p");
+  p.textContent = row[7];
+  const r = document.createElement("div");
+  r.className = "row3";
+  [["a", "전장", row[4]], ["b", "보스전", row[6]]].forEach(([sec, lab, len]) => {
+    const b = mk("new", lab, "한 바퀴 " + Math.round(len) + "초");
+    b.id = "bgm-" + row[0] + sec;
+    b.setAttribute("aria-pressed", "false");
+    b.onclick = () => bgPlay(row, sec, b);
+    r.appendChild(b);
+  });
+  c.append(h, p, r);
+  document.getElementById("bgm").appendChild(c);
+});
+document.getElementById("bk").oninput = (e) => {
+  BK = parseFloat(e.target.value);
+  document.getElementById("bkv").textContent = "×" + BK.toFixed(2);
+  document.getElementById("bhint").textContent = "?bgm=" + BK;
+  if (bg && ac) bg.bus.gain.setTargetAtTime(0.34 * BK, ac.currentTime, 0.1);
+};
+// 4. 환경음
+function amb(key, file, vol, btn) {
+  ensure();
+  const t = ac.currentTime;
+  document.querySelectorAll("#amb button").forEach((b) => { b.classList.remove("on"); b.setAttribute("aria-pressed", "false"); });
+  if (cur) {
+    cur.g.gain.cancelScheduledValues(t);
+    cur.g.gain.setValueAtTime(cur.g.gain.value, t);
+    cur.g.gain.linearRampToValueAtTime(0, t + 1.4);
+    cur.s.stop(t + 1.5);
+    const same = cur.key === key;
+    cur = null;
+    if (same) return;
+  }
+  btn.classList.add("on");
+  btn.setAttribute("aria-pressed", "true");
+  load("assets/sfx/" + file + ".wav").then((b) => {
+    const s = ac.createBufferSource();
+    s.buffer = b;
+    s.loop = true;
+    const g = ac.createGain();
+    g.gain.setValueAtTime(0, ac.currentTime);
+    g.gain.linearRampToValueAtTime(vol * K, ac.currentTime + 1.6);
+    s.connect(g);
+    g.connect(master);
+    s.start();
+    cur = { key, s, g, vol };
+  }).catch(() => {});
+}
+DATA.amb.forEach(([key, file, vol, lab]) => {
+  const b = mk("", lab, file + ".wav · 볼륨 " + vol);
+  b.id = "amb-" + key;
+  b.setAttribute("aria-pressed", "false");
+  b.onclick = () => amb(key, file, vol, b);
+  document.getElementById("amb").appendChild(b);
+});
+document.getElementById("k").oninput = (e) => {
+  K = parseFloat(e.target.value);
+  document.getElementById("kv").textContent = "×" + K.toFixed(2);
+  document.getElementById("hint").textContent = "?amb=" + K;
+  if (cur && ac) cur.g.gain.setTargetAtTime(cur.vol * K, ac.currentTime, 0.1);
+};
+// 5. 그 밖
+DATA.smp.forEach(([key, file, vol, lab]) => {
+  const b = mk("", lab, file + ".wav · 볼륨 " + vol);
+  b.id = "smp-" + key;
+  b.onclick = () => one(key);
+  document.getElementById("smp").appendChild(b);
+});
+document.getElementById("seqB").onclick = () => { one("buddhaBell"); one("buddhaChime", { d: 0.3 }); };
+document.getElementById("seqT").onclick = () => { one("thunder1", { v: 0.9, d: 0.5 }); };
+document.getElementById("seqH").onclick = () => { one("warHorn"); one("warHorn", { r: 0.84, v: 1.15, d: 3.4 }); };
+</script>
+</body>
+</html>

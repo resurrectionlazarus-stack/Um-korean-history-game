@@ -12,8 +12,8 @@
 | 항목 | 내용 |
 |---|---|
 | 무엇 | 한국사 6시대 횡스크롤 액션(벨트스크롤) 웹게임. React 18 단일 `index.html` + 원화 · 효과음 `assets/` |
-| 최신 빌드 | `shinsi-R34/` (index.html 22,584줄 · 1.17MB · assets 420종 · MANIFEST 419항목) |
-| 플레이 | R34 https://claude.ai/artifact/MrnPp3LH717EsSYDFqQ3tP · R33 https://claude.ai/artifact/8DRtahb3dDRZLTKh9FyPd5 (비공개 — 오너가 Share 메뉴로 공유) |
+| 최신 빌드 | `shinsi-R35/` (index.html 22,879줄 · 1.19MB · assets 441종 · MANIFEST 440항목) |
+| 플레이 | R35 https://claude.ai/artifact/LrkMYxn8GL64Gnz3S5hC3r · R34 https://claude.ai/artifact/MrnPp3LH717EsSYDFqQ3tP · R33 https://claude.ai/artifact/8DRtahb3dDRZLTKh9FyPd5 (비공개 — 오너가 Share 메뉴로 공유) |
 | 저장소 · 브랜치 | `resurrectionlazarus-stack/Um-korean-history-game` · 작업 브랜치 **`claude/r23-attack-walk-visibility-mob-ocesrz`** (여기에만 커밋 · 푸시) |
 | main 병합 | **하지 않음**(실기기 확인 뒤 오너 지시가 있을 때만) · PR도 요청이 있을 때만 |
 | 일하는 방식 | R33까지: 매니저가 한국어 '지시서'를 보냄. **R34부터: 총괄 · 디자인 · 음향 · 개발을 한 사람이 맡아 `ROADMAP.md`에 따라 범위를 스스로 정함**(오너가 언제든 바꿀 수 있음) → 라운드 RXX 작업 → 인수인계서 · 비교 이미지 · 배포본 · 플레이 링크 · 커밋 · 푸시로 납품 |
@@ -293,7 +293,7 @@ cd tools/r33 && node r33func.js /tmp/r33out 8033 && node load33.js 8033
 
 ---
 
-## 8. 열린 일 · 다음 후보(우선순위) — R34 뒤의 최신 목록은 `ROADMAP.md` 6절 · `R34-handoff.md` 6절
+## 8. 열린 일 · 다음 후보(우선순위) — 최신 목록은 `ROADMAP.md` 6절 · `R35-handoff.md` 6절
 
 1. **R33 실기기 확인**(오너): 전선 교차 · 날씨 · 번개 빈도, 4대 보스 체력 · 2페이즈 난이도, 범종 · 차임 볼륨, 모바일 프레임.
 2. **R32 지시문 확인**: 받으면 R33-handoff 5절 해석과 다른 곳만 수정.
@@ -320,6 +320,24 @@ cd tools/r33 && node r33func.js /tmp/r33out 8033 && node load33.js 8033
 - **DEV 훅 추가**: `r34()` → 환경음 상태 · 지금 날씨 종류 · 시대별 격파 목표.
 - **썸네일**: `thumb.jpg` + `<link rel="artifact-thumbnail">`(아티팩트 갤러리 카드). `tools/r34/make_thumb.py`.
 
+## 11. R35에서 달라진 점(R34 내용에 덧붙임)
+
+- **최신 빌드 계보**: `shinsi-R34/index.html` + `python3 -I tools/r35/r35_patch.py <사본>` = `shinsi-R35/index.html`(25곳). 패치는 `tools/r35/bgm_meta.json`(음악 구간 위치표)을 읽어 `R35_BGM` 표를 만든다 — 곡을 다시 구우면 패치도 다시 적용할 것.
+- **테스트**: `bash tools/r35/run_tests.sh`(포트 8038 · 기능 18/18 기대). 빌드 점검 `python3 -I tools/r33/check_build.py shinsi-R35`(440 = 440). 납품 때 부하: R35 최저 60 · 같은 기계 R34 기준선 57.
+- **오너 피드백 읽는 법(이번에 배운 것)**: "왼손잡이면 무기 드는 게 이상하다"를 '왼쪽을 볼 때 어긋난다'로 읽고 좌우 그리기를 전수 비교했지만 어긋남은 0이었다. 진짜 원인은 무기 그림마다 손이 따로 그려진 것(1시대 2 · 3단계). **증상을 재현하지 못하면 가정을 바꿔 그림 자체를 확대해 볼 것**, 그리고 인수인계서에 "이렇게 읽었고, 아니면 캡처를 달라"고 적을 것.
+- **무기 리그 보충**(4-2절): 1 · 2 · 4시대 몸 원화는 무기 든 팔이 소매 끝에서 끊겨 있고(달리기 · R32 자세만 맨주먹이 그려져 있음) 손은 무기 그림 쪽에 있다. 무기 그림의 손은 **팔뚝 토막 없는 작은 주먹**이어야 어느 자세에서도 팔과 이어져 보인다. 새 무기 그림을 받으면 `tools/r35/fist_sheet.py`로 전 프레임을 겹쳐 본다(등급마다). 1시대는 `unify_fist.py`로 1단계 주먹을 세 무기에 통일(원본 `tools/r35/era1_weapon_orig/`).
+- **좌우 대칭 점검 도구**: `mirror_numeric.js`(무기 끝 좌표의 좌우 대칭 — 0.0000px이어야 정상) · `mirror_check.js` + `mirror_diff.py`(자세별 좌우 촬영 겹쳐 보기). 시뮬레이션은 `g.hitStop = 1e9`로 멈추고 `p._r31pose = { name, until }`로 자세를 고정한다.
+- **타격음**(4-5절 보충): `r35HitSnd(lv, o)`가 무기 종류(`heroWeaponClass`: AXE · SPEAR · SWORD)와 세기(light · heavy · crush · sever · armor · flurry · gun)로 샘플을 고른다. 강타 = 연타의 마지막 타(`lastStep`: 피니시 전 3타 · 뒤 4타 · 2시대 3타부터). 휘두르는 바람은 `r35Whoosh()`. 새 소리는 `tools/r35/synth_hits.py`(scipy 필요)에서 만들고 `SMP` · `SMP_VOL` · `SMP_MAXV` · `SMP_JIT` · `SMP_FALLBACK` 다섯 표에 모두 등록.
+  - 타격음은 **300~2400Hz(휴대폰이 잘 내는 몸통)가 45% 이상**이어야 한다. 예전 소리는 4.8kHz 위 65~76%라 '전기 모기채'로 들렸다. 스크립트가 대역 비율을 찍어 준다.
+  - 타격음 앞의 예비 바람은 30ms 이하(화면 타격 순간과의 지연).
+- **시대 배경음악**: `assets/bgm/era{N}_*.mp3` 6곡. `createFileBgm`(index 안)이 재생한다 — 파일 맨 앞 표지음(0.02초 지점 · 재생 안 함)으로 mp3 디코더 지연을 보정하고, 구간 몸통 길이마다 새 소스를 겹쳐 틀어 이음매 없이 돈다(꼬리 2초 = 잔향). `bgm("play", "field3" | "boss")`가 곡이 준비됐으면 mp3를, 아니면 예전 합성 BGM(`createBgm`)을 튼다. `bgmStats.track`은 두 경우 모두 논리 트랙 이름을 돌려준다(`syncBgm`이 이것으로 재요청 여부를 판단). `?bgm=synth` · `?bgm=0~2`.
+  - 곡 만들기: `tools/r35/bgm_lib.py`(악기) · `bgm_render.py`(악보 `era1`~`era6` 함수 · A = 전장, B = 보스전) → `python3 tools/r35/bgm_render.py shinsi-R35/assets/bgm [시대]`(ffmpeg · scipy 필요) → 패치 재적용 → `manifest_r35.py` → `make_sound_check.py`.
+  - 악보 표기: `'G4:3 A4:1~ r:2'` = 음이름:길이(+꾸밈 `~` 농현 `^` 위 꾸밈음 `v` 아래 꾸밈음 `/` 미끄러짐 `\` 끝 떨굼 `!` 세게). 타악은 마디마다 글자 악보(`D` 덩 `G` 쿵 `K` 덕 `R` 굴림 `B` 북 …).
+  - 악기별 음량은 `S.stem(이름, dB, 잔향 보냄)`. 굽고 나면 악기별 RMS와 대역 분포가 찍힌다 — 북이 150Hz 아래를 40% 넘게 차지하면 휴대폰에서 가락만 남으니 낮출 것.
+- **음향 점검 페이지**: `python3 -I tools/r35/make_sound_check.py shinsi-R35 <아티팩트용 출력>` → 같은 링크(QSg43hGAD1mgJALZhnyZMT)에 게시(새 소리 파일을 `files`로 함께). 타격음 '예전 ↔ 새' 비교 줄(CMP) · 연타 · 음악 구역이 있다.
+- **DEV 훅 추가**: `r35()` → 무기 종류별 타격음 횟수(`snd`) · 궤적 끊기 횟수 · 음악 상태(`bgm.file`: era · sec · rate · pos · loops · cached) · 샘플 상태. `r35bgm(cmd, arg)` → 음악 명령(시험에서 빠르기 6배로 반복 확인).
+- **아티팩트 게시**: 파일 442개 · 79MB → 221개씩 두 번(`batches`는 크기 균형으로 나눔). 음악 mp3는 `audio/mpeg`로 그대로 올라간다.
+
 ## 9. 라운드 연혁(무엇이 어디서 바뀌었나)
 
 | 라운드 | 커밋 | 요지 |
@@ -335,4 +353,5 @@ cd tools/r33 && node r33func.js /tmp/r33out 8033 && node load33.js 8033
 | R31 | 3196ccf | 전 시대 정식 원화 83 · 해모수 신화 · 4시대 5대 전선 · 미션 · 김원봉 · 타격 이펙트 5 |
 | R32 | (원화만) | 척준경 질주 8 · 무신 4자세 · 김원봉 총기 4자세 · 이펙트 4 · WAV 6 — R33에서 함께 연결 |
 | R33 | 4e15f99 | 4시대 전선 맵 4 · 날씨 · 4대 보스 · 부처님의 가호 리뉴얼 · 쥔 자리 74장 전수 보정 |
-| R34 | (이 커밋) | 전장의 숨결: 환경음 루프 4 · 천둥 · 뿔나팔(직접 합성) · 척준경 옷 색 통일 · 격파 수 정합 · 썸네일 · 로드맵 |
+| R34 | 580075f · c2180f1 | 전장의 숨결: 환경음 루프 4 · 천둥 · 뿔나팔(직접 합성) · 척준경 옷 색 통일 · 격파 수 정합 · 썸네일 · 로드맵 |
+| R35 | (이 커밋) | 손맛과 가락(오너 직접 피드백): 1시대 무기 손 통일 · 방향 전환 궤적 끊기 · 무기 종류별 타격음 15종 · 시대 배경음악 6곡(mp3) + 재생기 |
