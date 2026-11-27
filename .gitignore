@@ -1,0 +1,9 @@
+dist/*part*.zip
+dist/*part*.zip.sha256
+# [R37] 음향감독 원본 WAV(104개 · 120.7MB)는 저장소에 넣지 않는다 — tools/r37/build_sfx.py로 만든 assets/sfx/sfx_*.mp3만 커밋
+신시 효과음.zip
+신시 효과음/
+tools/r37/src_wav/
+tools/r37/*.zip
+# 이 PC용 Python 가상환경(저장소 밖에 두지만 혹시 안에 만들면)
+.venv*/
