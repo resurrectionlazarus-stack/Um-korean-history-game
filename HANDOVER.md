@@ -313,7 +313,7 @@ cd tools/r33 && node r33func.js /tmp/r33out 8033 && node load33.js 8033
 - **소리 만들기(음향감독 역할)**: `tools/r34/synth_audio.py`가 환경음 루프 4 · 천둥 2 · 뿔나팔을 수식으로 합성(시드 고정). 새 소리를 더하려면 이 스크립트에 추가 → `SMP`(한 번 울리는 소리) 또는 `AMB`(루프) 표에 등록 → `manifest_r34.py` 방식으로 MANIFEST에 항목 추가 → `make_sound_check.py`로 점검 페이지 갱신.
   - 루프는 반드시 주기 신호로(주파수 영역 무작위 위상 잡음 · 끝을 넘으면 처음으로 감기 · 원형 잔향) — 끝과 처음이 이어져야 한다.
   - 휴대폰 스피커는 300Hz 아래가 거의 안 들린다 → 에너지를 300~2000Hz에 남길 것.
-  - 직접 들을 수 없으므로 수치(음량 · 대역 · 이음매) + 스펙트로그램으로 확인하고, 오너가 `sound-check.html`에서 듣고 판단한다.
+  - 직접 들을 수 없으므로 수치(음량 · 대역 · 이음매) + 스펙트로그램으로 확인하고, 오너가 음향 점검 페이지에서 듣고 판단한다(https://claude.ai/artifact/QSg43hGAD1mgJALZhnyZMT · 배포 폴더의 `sound-check.html`). 소리 표를 바꾸면 `make_sound_check.py <빌드 폴더> <아티팩트용 출력>`로 다시 만들어 같은 링크에 게시.
 - **환경음 엔진**: `createSfxEngine` 안 `amb(name, vol)` · `ambStats`. `syncBgm`이 매 프레임 지금 날씨(`g.weatherMotes.wt`)에 맞는 루프를 요청(`R34_AMB_BY_WEATHER`). 같은 요청은 무시되므로 매 프레임 불러도 된다. `?amb=0~2`.
 - **원화 색 보정(디자이너 역할)**: `tools/r34/cjg_regrade.py` — 살색을 가리고 따뜻한 천 색만 낮춤 · 무손실 저장 · 투명 영역 불변(쥔 자리 유지). 원본은 `tools/r34/cjg_r32_orig/`.
 - **격파 수**: `eraKillGoal(era)`가 웨이브 표에서 분모를 계산. 웨이브 표(ZONE_WAVES · ERA2_ZONE_WAVES · ERA4_ZONE_WAVES) · 중간보스 정의를 바꾸면 자동으로 따라간다.

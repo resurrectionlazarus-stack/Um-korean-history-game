@@ -9,7 +9,9 @@
 - 바로 플레이: https://claude.ai/artifact/MrnPp3LH717EsSYDFqQ3tP
   - R34 · 비공개입니다. 다른 분께 보여 주려면 페이지 Share 메뉴에서 공유해 주세요.
   - R33 링크는 그대로 남겨 두었습니다.
-- 음향 점검 페이지: 배포 폴더의 `sound-check.html` — 새 소리를 하나씩 들어 볼 수 있습니다(6절).
+- 음향 점검 페이지: https://claude.ai/artifact/QSg43hGAD1mgJALZhnyZMT
+  - 새 소리를 하나씩 들어 볼 수 있습니다(6절). 비공개 링크이고 휴대폰에서 바로 열립니다.
+  - 같은 페이지가 배포 폴더에도 `sound-check.html`로 들어 있습니다(직접 올린 사이트에서는 주소 뒤에 `sound-check.html`).
 - 비교 이미지: `R34-screenshots/` (5장)
 - 앞으로의 계획: `ROADMAP.md`
 
@@ -155,7 +157,7 @@
 
 ## 6. 오너 확인 부탁
 
-1. **소리**: `sound-check.html`(배포 폴더 안, 플레이 링크 주소 뒤에 `sound-check.html`을 붙여도 열립니다)에서
+1. **소리**: 음향 점검 페이지(맨 위 링크)에서
    - 환경음 4종의 느낌과 세기(슬라이더로 바꿔 보고 마음에 드는 값을 알려 주세요),
    - 천둥 2종,
    - **뿔나팔**(어색하면 빼거나 다시 만들겠습니다),
@@ -168,7 +170,7 @@
 
 - `shinsi-R34/index.html` — R33 대비 16곳 수정(`[R34]` 주석 10곳). `tools/r34/r34_patch.py`를 R33 본에 적용하면 같은 파일이 나옵니다.
 - `shinsi-R34/assets/sfx/` — 새 WAV 7개 · `shinsi-R34/assets/hero/era4_hero_{run~run8, cleave_prep, cleave_hit, charge, dragon_stance}.webp` 색 보정 12장.
-- `shinsi-R34/sound-check.html` · `shinsi-R34/thumb.jpg`
+- `shinsi-R34/sound-check.html`(음향 점검 — 밝은 · 어두운 테마 모두) · `shinsi-R34/thumb.jpg`
 - `tools/r34/`:
   - 패치 `r34_patch.py` · 목록 병합 `manifest_r34.py`
   - 음향 `synth_audio.py` · 점검 페이지 `make_sound_check.py`
