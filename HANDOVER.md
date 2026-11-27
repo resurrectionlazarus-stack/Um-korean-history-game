@@ -4,7 +4,7 @@
 > 이 문서 하나만 읽고 다음 라운드(R34~)를 혼자 돌릴 수 있게 썼습니다.
 > 사람 개발자든 AI 에이전트(Claude 등)든 같은 순서로 따라오면 됩니다.
 > 라운드별 자세한 기록은 `R23-handoff.md` ~ `R36.5-2-handoff.md`에 있습니다(최신 = R36.5-2). 앞으로의 계획은 `ROADMAP.md`.
-> 줄 번호 · 예시 명령은 R33 기준으로 쓴 것이 많습니다. R34에서 달라진 점은 **10절**, R35는 **11절**, R36은 **12절**, R36.5는 **13절**, R36.5-2는 **14절**에 모았습니다.
+> 줄 번호 · 예시 명령은 R33 기준으로 쓴 것이 많습니다. R34에서 달라진 점은 **10절**, R35는 **11절**, R36은 **12절**, R36.5는 **13절**, R36.5-2는 **14절**, R37(새 효과음 엔진)은 **15절**에 모았습니다.
 
 ---
 
@@ -13,8 +13,8 @@
 | 항목 | 내용 |
 |---|---|
 | 무엇 | 한국사 6시대 횡스크롤 액션(벨트스크롤) 웹게임. React 18 단일 `index.html` + 원화 · 효과음 `assets/` |
-| 최신 빌드 | `shinsi-R36.5-2/` (index.html 23,146줄 · 1.21MB — R36 · R36.5와 같음 · assets 456종 · MANIFEST 455항목) |
-| 플레이 | **R36.5-2 https://claude.ai/artifact/FgvndJmipef8BGKyU82Yvf** · R36.5 https://claude.ai/artifact/RxAoQ8Gfhsc5fusv9hGU1d · R36 https://claude.ai/artifact/3aXmHDQY6Xp9afZoqtQAAc · R35 https://claude.ai/artifact/LrkMYxn8GL64Gnz3S5hC3r · R34 https://claude.ai/artifact/MrnPp3LH717EsSYDFqQ3tP · R33 https://claude.ai/artifact/8DRtahb3dDRZLTKh9FyPd5 (비공개 — 오너가 Share 메뉴로 공유) |
+| 최신 빌드 | `shinsi-R37/` (R36.5-2 + 패치 48곳 · 새 효과음 MP3 64 + 표 · MANIFEST 520항목 — **저장소 미반영**, 15절) · 직전 `shinsi-R36.5-2/`(MANIFEST 455) |
+| 플레이 | **R37 https://claude.ai/artifact/6o4E1jES1aXqxfDCjPE7jc** · R36.5-2 https://claude.ai/artifact/FgvndJmipef8BGKyU82Yvf · R36.5 https://claude.ai/artifact/RxAoQ8Gfhsc5fusv9hGU1d · R36 https://claude.ai/artifact/3aXmHDQY6Xp9afZoqtQAAc · R35 https://claude.ai/artifact/LrkMYxn8GL64Gnz3S5hC3r · R34 https://claude.ai/artifact/MrnPp3LH717EsSYDFqQ3tP · R33 https://claude.ai/artifact/8DRtahb3dDRZLTKh9FyPd5 (비공개 — 오너가 Share 메뉴로 공유) · 음향 점검 https://claude.ai/artifact/QSg43hGAD1mgJALZhnyZMT |
 | 저장소 · 브랜치 | `resurrectionlazarus-stack/Um-korean-history-game` · 작업 브랜치 **`claude/r23-attack-walk-visibility-mob-ocesrz`** (여기에만 커밋 · 푸시) |
 | main 병합 | **하지 않음**(실기기 확인 뒤 오너 지시가 있을 때만) · PR도 요청이 있을 때만 |
 | 일하는 방식 | R33까지: 매니저가 한국어 '지시서'를 보냄. **R34부터: 총괄 · 디자인 · 음향 · 개발을 한 사람이 맡아 `ROADMAP.md`에 따라 범위를 스스로 정함**(오너가 언제든 바꿀 수 있음) → 라운드 RXX 작업 → 인수인계서 · 비교 이미지 · 배포본 · 플레이 링크 · 커밋 · 푸시로 납품 |
@@ -389,6 +389,24 @@ cd tools/r33 && node r33func.js /tmp/r33out 8033 && node load33.js 8033
 - **오너 피드백 읽는 법 — 네 번째 교훈**: R36.5에서 사진의 '손가락 배치'를 맞췄지만 오너가 본 것은 '비율'이었다. 그리고 덧그린 그림은 티가 난다. **느낌을 숫자로 바꿔 원인을 찾고(크기를 잰다), 그림은 그리지 말고 미술팀 원화를 살린다.** 전체 경위는 `NEXT-SESSION.md` 3절.
 - **새 방 인수인계**: `NEXT-SESSION.md`(첫 메시지 · 지금 상태 · 열린 결정) · `dist/shinsi-handover-R36.5-2.zip`(문서 묶음).
 
+## 15. R37에서 달라진 점(R36.5-2 내용에 덧붙임)
+
+- **최신 빌드 계보**: `shinsi-R36.5-2/index.html` + `python3 -I tools/r37/r37_patch.py <사본>` = `shinsi-R37/index.html`(48곳). 패치는 `tools/r37/r37_engine.js`(새 엔진 본체)를 읽어 `createSfxEngine` 앞에 넣는다 — 엔진을 고치면 패치를 다시 적용할 것.
+- **이 라운드는 오너의 Windows PC(git · node 없음)에서 만들었고 저장소에 미반영**이다. 반영 절차는 `R37-handoff.md` 10절 · `dist/shinsi-R37-repo-delta.zip`의 `APPLY-ON-CLOUD.md`.
+- **테스트**: `bash tools/r37/run_tests.sh`(포트 8042 · 기능 12항목 기대 — 이 PC에서는 미실행, 브라우저 콘솔 판으로 같은 항목 확인). 빌드 점검 `python3 -I tools/r37/check_build37.py shinsi-R37`(520 = 520 · assets/sfx 5.912MB ≤ 6.0MB · sfx_manifest 파일 확인). 부하 판정 보류(`R37-handoff.md` 6-2절).
+- **소리의 구조(4-5절을 대체)**: 두 엔진이 한 AudioContext를 쓴다.
+  - 옛 엔진 `createSfxEngine`(R27~R36): `SMP` 다섯 표의 WAV · 합성음 · 환경음 · 음악 → `master`(= **덕킹 버스** · 게인 1) → `trunk`(0.5 · 음소거) → 컴프레서 -16dB 8:1 → 출력.
+  - 새 엔진 `createR37Sfx(ac, trunk, master)`: `assets/sfx/sfx_manifest.json`(키 → MP3 파일 · 루프 지점)을 첫 입력 때 받아 공용 + 지금 시대를 디코딩(시대가 바뀌면 그 시대 · 보스 처치 때 다음 시대). 재생: 변주 셔플 · 피치 흔들림 · 동시 상한 · 쿨다운 · 좌우 패닝 · mob(덕킹) / force 버스 → 컴프레서 -10dB 4:1 → `out`(`?r37=` 세기) → `trunk`. 디코더 앞머리 지연은 디코딩 뒤 첫 소리 지점을 재서 보정한다(lameenc MP3에 LAME 머리말이 없음). 루프 파일은 루프 지점이 파일 안쪽(앞뒤 0.1초 주기 연장).
+  - 게임 쪽 연결 함수(App 안 · `r35Whoosh` 뒤): `r37()` · `r37Pan(x)` · `r37Weapon()` · `r37Hit(lv, o, target)`(타격음 11자리) · `r37Effort(step, N, kind)`(기합) · `r37EnemyDown(en)`(적 사망 1자리) · `r37BossDeath()` · `r37WarCry(n)` · `r37Step(g)`(12틱마다 기병 경보 · 말발굽 루프 · 후두 구호 루프). 모든 자리는 "새 엔진이 재생했으면 끝, 아니면 예전 소리".
+  - 쇠 울림(`cutArmor`) · 늑대 하울링 · 깨갱 · 하이에나 · 짧은 으르렁 · 환경음 · 천둥 · 뿔나팔 · 차임 · 2~6시대 보스 포효는 R36 소리 그대로.
+- **소리를 다시 굽는 법**: `python3 -I tools/r37/build_sfx.py <신시 효과음.zip 또는 폴더> <빌드>` → `manifest_r37.py <빌드>`(bytes 갱신) → `make_sound_check.py <빌드> <아티팩트용>` → 같은 링크(QSg43hGAD1mgJALZhnyZMT)에 게시. 테이크 · 카테고리(목표 RMS · 창 · 형식) · 구간 모드는 `build_sfx.py` 안 표. 게임 속 볼륨 · 동시 상한 · 쿨다운 · 시대 묶음은 `r37_engine.js`의 `P` · `ERA`.
+  - 피크 -1dBFS 제약 때문에 수십 ms 타격(돌도끼)은 파일 RMS가 칼보다 3~4dB 낮다 → 재생 볼륨으로 보완(`P.sfx_stone_axe_hit.v = 1.3`). 목표 미달 파일은 굽기 로그가 찍어 준다.
+  - 원본 WAV는 `.gitignore`. 저장소에는 MP3 64개(2.07MB)만.
+- **DEV 훅 추가**: `window.__SHINSI_SFX__`(엔진 그대로 — `play` · `loop` · `duck` · `stats` · `keys`) · `__RELIC_DEV.r37()`(엔진 상태 + 새/옛 타격음 횟수 + 목소리 횟수 + 기병 루프 상태) · `__RELIC_SFX.r37gains`(trunk · 덕킹 버스 게인). URL `?r37=0`(끔) · `?r37=0.5~2`.
+- **발주서를 받았을 때**: 항목표를 인수인계서 0절에 그대로 옮겨 반영 · 미반영 · 다르게 한 이유를 적는다(`R37-handoff.md` 0 · 2-3 · 5절). 발주서의 'h.js'처럼 저장소 사정과 맞지 않는 말은 가장 그럴듯한 뜻으로 옮기고 그렇게 읽었다고 적는다.
+- **플레이 링크 게시**: 파일 522개 · 82MB → 세 묶음(`tools/r37/make_batches37.py`).
+- **Windows PC에서 돌릴 때**: `tools/r37/run_py.ps1 <스크립트> [인자]`(Anaconda DLL 경로 · UTF-8 · `-I -X utf8`). node가 없으면 `check_build37.py`가 문법 검사를 건너뛴다 → 브라우저에서 콘솔 에러 0으로 확인.
+
 ## 9. 라운드 연혁(무엇이 어디서 바뀌었나)
 
 | 라운드 | 커밋 | 요지 |
@@ -409,3 +427,4 @@ cd tools/r33 && node r33func.js /tmp/r33out 8033 && node load33.js 8033
 | R36 | e0cefb0 | 짐승의 기척 · 갈래 기술(오너 직접 피드백): 둔기 타격음 '퍽' 4종 · 짐승 울음 10 · 병사 함성 1 · 연타 갈래 기술 4종(올려치기 · 공중 추격 · 내려찍기 · 관통 돌진) · 오른손 파지 미술 발주서(R36.5에서 철회) |
 | R36.5 | 29564ff | 무기를 쥔 손을 왼손답게(오너 직접 피드백): 무기 그림 9장 — 옛 엄지 지움 · 엄지를 앞에 얹음 · 1시대 손톱. 코드 변경 없음 |
 | R36.5-2 | 02445a0 | 무기를 쥔 손의 비율(오너 직접 피드백): 무기 그림 9장의 손을 몸 원화의 주먹으로 교체(같은 크기) · 1시대 자루 가늘게 · 2 · 4시대 건틀릿 → 맨주먹. 코드 변경 없음. 새 방 인수인계서 `NEXT-SESSION.md` |
+| R37 | (미커밋 — `dist/shinsi-R37-repo-delta.zip`) | 리얼리티 효과음(음향감독 발주서): 녹음 104개 → MP3 64개(트림 · 정규화 · EQ · 심리스 루프 · 파생 4) + Web Audio 엔진 `createR37Sfx`(변주 · 쿨다운 · 패닝 · 덕킹 · 시대별 preload · 디코더 지연 보정) + 연동 48곳(타격 · 기합 · 피격 · 사망 · 적 · 궁수 · 화살비 · 기병 · 부처님). Windows PC에서 제작 · 부하 판정 보류 |

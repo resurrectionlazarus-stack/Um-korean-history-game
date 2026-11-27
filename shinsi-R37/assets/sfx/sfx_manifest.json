@@ -1,0 +1,884 @@
+{
+ "r37": {
+  "tool": "tools/r37/build_sfx.py",
+  "source": "신시 효과음.zip — 48kHz 16bit stereo WAV 104개 · 33 prefixes",
+  "count": 64,
+  "bytes": 2019194,
+  "sample_rate": 44100,
+  "note": "키 → 파일(변주 _01~_03) · loop = [loopStart, loopEnd](초 · 파일 안쪽 지점). 게임 엔진(index.html의 createR37Sfx)이 읽는다."
+ },
+ "keys": {
+  "sfx_sword_slash": {
+   "files": [
+    "sfx_sword_slash_01.mp3",
+    "sfx_sword_slash_02.mp3",
+    "sfx_sword_slash_03.mp3"
+   ],
+   "cat": "hit_sword",
+   "stereo": false
+  },
+  "sfx_sword_cut_hit": {
+   "files": [
+    "sfx_sword_cut_hit.mp3"
+   ],
+   "cat": "hit_sword",
+   "stereo": false
+  },
+  "sfx_stone_axe_hit": {
+   "files": [
+    "sfx_stone_axe_hit_01.mp3",
+    "sfx_stone_axe_hit_02.mp3",
+    "sfx_stone_axe_hit_03.mp3"
+   ],
+   "cat": "hit_axe",
+   "stereo": false
+  },
+  "sfx_stone_axe_heavy": {
+   "files": [
+    "sfx_stone_axe_heavy_01.mp3",
+    "sfx_stone_axe_heavy_02.mp3"
+   ],
+   "cat": "hit_axe",
+   "stereo": false
+  },
+  "sfx_obsidian_jab": {
+   "files": [
+    "sfx_obsidian_jab_01.mp3",
+    "sfx_obsidian_jab_02.mp3"
+   ],
+   "cat": "swing",
+   "stereo": false
+  },
+  "sfx_obsidian_hit": {
+   "files": [
+    "sfx_obsidian_hit.mp3"
+   ],
+   "cat": "hit",
+   "stereo": false
+  },
+  "sfx_hero_effort_light": {
+   "files": [
+    "sfx_hero_effort_light_01.mp3",
+    "sfx_hero_effort_light_02.mp3",
+    "sfx_hero_effort_light_03.mp3"
+   ],
+   "cat": "voice",
+   "stereo": false
+  },
+  "sfx_hero_effort_heavy": {
+   "files": [
+    "sfx_hero_effort_heavy_01.mp3",
+    "sfx_hero_effort_heavy_02.mp3"
+   ],
+   "cat": "voice",
+   "stereo": false
+  },
+  "sfx_hero_barbarian_roar": {
+   "files": [
+    "sfx_hero_barbarian_roar_01.mp3",
+    "sfx_hero_barbarian_roar_02.mp3"
+   ],
+   "cat": "voice",
+   "stereo": false
+  },
+  "sfx_hero_hit_light": {
+   "files": [
+    "sfx_hero_hit_light_01.mp3",
+    "sfx_hero_hit_light_02.mp3",
+    "sfx_hero_hit_light_03.mp3"
+   ],
+   "cat": "hero_hit",
+   "stereo": false
+  },
+  "sfx_hero_hit_heavy": {
+   "files": [
+    "sfx_hero_hit_heavy_01.mp3",
+    "sfx_hero_hit_heavy_02.mp3"
+   ],
+   "cat": "hero_hit",
+   "stereo": false
+  },
+  "sfx_hero_death": {
+   "files": [
+    "sfx_hero_death_01.mp3",
+    "sfx_hero_death_02.mp3"
+   ],
+   "cat": "hero_hit",
+   "stereo": false
+  },
+  "sfx_wolf_attack": {
+   "files": [
+    "sfx_wolf_attack_01.mp3",
+    "sfx_wolf_attack_02.mp3"
+   ],
+   "cat": "beast",
+   "stereo": true
+  },
+  "sfx_rhino_charge": {
+   "files": [
+    "sfx_rhino_charge_01.mp3",
+    "sfx_rhino_charge_02.mp3"
+   ],
+   "cat": "beast_rhino",
+   "stereo": true
+  },
+  "sfx_bear_roar": {
+   "files": [
+    "sfx_bear_roar_01.mp3",
+    "sfx_bear_roar_02.mp3"
+   ],
+   "cat": "beast_big",
+   "stereo": true
+  },
+  "sfx_tiger_roar": {
+   "files": [
+    "sfx_tiger_roar_01.mp3",
+    "sfx_tiger_roar_02.mp3"
+   ],
+   "cat": "beast_big",
+   "stereo": true
+  },
+  "sfx_beast_death": {
+   "files": [
+    "sfx_beast_death.mp3"
+   ],
+   "cat": "beast_big",
+   "stereo": true
+  },
+  "sfx_beast_boss_death": {
+   "files": [
+    "sfx_beast_boss_death.mp3"
+   ],
+   "cat": "beast_big",
+   "stereo": true
+  },
+  "sfx_bow_full": {
+   "files": [
+    "sfx_bow_full_01.mp3",
+    "sfx_bow_full_02.mp3"
+   ],
+   "cat": "bow",
+   "stereo": false
+  },
+  "sfx_bow_shoot": {
+   "files": [
+    "sfx_bow_shoot_01.mp3",
+    "sfx_bow_shoot_02.mp3"
+   ],
+   "cat": "bow",
+   "stereo": false
+  },
+  "sfx_bow_draw": {
+   "files": [
+    "sfx_bow_draw.mp3"
+   ],
+   "cat": "bow",
+   "stereo": false
+  },
+  "sfx_arrow_volley": {
+   "files": [
+    "sfx_arrow_volley.mp3"
+   ],
+   "cat": "volley",
+   "stereo": true
+  },
+  "sfx_rifle_shot": {
+   "files": [
+    "sfx_rifle_shot_01.mp3",
+    "sfx_rifle_shot_02.mp3"
+   ],
+   "cat": "gun",
+   "stereo": false
+  },
+  "sfx_pistol_shot": {
+   "files": [
+    "sfx_pistol_shot.mp3"
+   ],
+   "cat": "gun",
+   "stereo": false
+  },
+  "sfx_enemy_katana_hurt": {
+   "files": [
+    "sfx_enemy_katana_hurt_01.mp3",
+    "sfx_enemy_katana_hurt_02.mp3"
+   ],
+   "cat": "voice",
+   "stereo": false
+  },
+  "sfx_enemy_bullet_hurt": {
+   "files": [
+    "sfx_enemy_bullet_hurt_01.mp3",
+    "sfx_enemy_bullet_hurt_02.mp3"
+   ],
+   "cat": "voice",
+   "stereo": false
+  },
+  "sfx_boss_general_death": {
+   "files": [
+    "sfx_boss_general_death_01.mp3",
+    "sfx_boss_general_death_02.mp3"
+   ],
+   "cat": "death",
+   "stereo": true
+  },
+  "sfx_soldier_down": {
+   "files": [
+    "sfx_soldier_down.mp3"
+   ],
+   "cat": "death",
+   "stereo": true
+  },
+  "sfx_cavalry_hooves_loop": {
+   "files": [
+    "sfx_cavalry_hooves_loop.mp3"
+   ],
+   "cat": "loop_low",
+   "stereo": true,
+   "loop": [
+    0.1,
+    4.1
+   ]
+  },
+  "sfx_cavalry_charge": {
+   "files": [
+    "sfx_cavalry_charge.mp3"
+   ],
+   "cat": "cav",
+   "stereo": true
+  },
+  "sfx_cavalry_horn": {
+   "files": [
+    "sfx_cavalry_horn.mp3"
+   ],
+   "cat": "horn",
+   "stereo": true
+  },
+  "sfx_army_warcry": {
+   "files": [
+    "sfx_army_warcry_01.mp3",
+    "sfx_army_warcry_02.mp3"
+   ],
+   "cat": "crowd",
+   "stereo": true
+  },
+  "sfx_nomad_horde_cry": {
+   "files": [
+    "sfx_nomad_horde_cry_01.mp3",
+    "sfx_nomad_horde_cry_02.mp3"
+   ],
+   "cat": "crowd",
+   "stereo": true
+  },
+  "sfx_nomad_chant_loop": {
+   "files": [
+    "sfx_nomad_chant_loop.mp3"
+   ],
+   "cat": "loop",
+   "stereo": true,
+   "loop": [
+    0.1,
+    4.6
+   ]
+  },
+  "sfx_nomad_ambush_cry": {
+   "files": [
+    "sfx_nomad_ambush_cry_01.mp3",
+    "sfx_nomad_ambush_cry_02.mp3"
+   ],
+   "cat": "cry",
+   "stereo": true
+  },
+  "sfx_buddha_emille_bell": {
+   "files": [
+    "sfx_buddha_emille_bell.mp3"
+   ],
+   "cat": "bell",
+   "stereo": true
+  },
+  "sfx_buddha_light_aura": {
+   "files": [
+    "sfx_buddha_light_aura.mp3"
+   ],
+   "cat": "aura",
+   "stereo": true
+  }
+ },
+ "files": {
+  "sfx_sword_slash_01.mp3": {
+   "bytes": 8464,
+   "dur": 0.663,
+   "src": "ultra_sharp_thin_ste #3",
+   "rms": -14.5,
+   "peak": -5.3,
+   "stereo": false,
+   "kbps": 96
+  },
+  "sfx_sword_slash_02.mp3": {
+   "bytes": 8464,
+   "dur": 0.672,
+   "src": "ultra_sharp_thin_ste #4",
+   "rms": -14.5,
+   "peak": -6.3,
+   "stereo": false,
+   "kbps": 96
+  },
+  "sfx_sword_slash_03.mp3": {
+   "bytes": 12225,
+   "dur": 0.967,
+   "src": "ultra_sharp_thin_ste #1",
+   "rms": -14.5,
+   "peak": -6.8,
+   "stereo": false,
+   "kbps": 96
+  },
+  "sfx_sword_cut_hit.mp3": {
+   "bytes": 6896,
+   "dur": 0.535,
+   "src": "razor_sharp_steel_bl #4",
+   "rms": -14.5,
+   "peak": -3.7,
+   "stereo": false,
+   "kbps": 96
+  },
+  "sfx_stone_axe_hit_01.mp3": {
+   "bytes": 15360,
+   "dur": 1.242,
+   "src": "heavy_rough_stone_ax #3",
+   "rms": -16.3,
+   "peak": -1.0,
+   "stereo": false,
+   "kbps": 96
+  },
+  "sfx_stone_axe_hit_02.mp3": {
+   "bytes": 6269,
+   "dur": 0.496,
+   "src": "heavy_rough_stone_ax #4",
+   "rms": -16.5,
+   "peak": -1.0,
+   "stereo": false,
+   "kbps": 96
+  },
+  "sfx_stone_axe_hit_03.mp3": {
+   "bytes": 7523,
+   "dur": 0.597,
+   "src": "heavy_rough_stone_ax #2",
+   "rms": -17.8,
+   "peak": -1.0,
+   "stereo": false,
+   "kbps": 96
+  },
+  "sfx_stone_axe_heavy_01.mp3": {
+   "bytes": 23824,
+   "dur": 1.937,
+   "src": "massive_prehistoric_ #2",
+   "rms": -13.5,
+   "peak": -3.0,
+   "stereo": false,
+   "kbps": 96
+  },
+  "sfx_stone_axe_heavy_02.mp3": {
+   "bytes": 28526,
+   "dur": 2.339,
+   "src": "massive_prehistoric_ #4",
+   "rms": -13.5,
+   "peak": -1.3,
+   "stereo": false,
+   "kbps": 96
+  },
+  "sfx_obsidian_jab_01.mp3": {
+   "bytes": 5016,
+   "dur": 0.373,
+   "src": "fast_tight_wooden_sp #1",
+   "rms": -15.5,
+   "peak": -4.5,
+   "stereo": false,
+   "kbps": 96
+  },
+  "sfx_obsidian_jab_02.mp3": {
+   "bytes": 5329,
+   "dur": 0.405,
+   "src": "fast_tight_wooden_sp #4",
+   "rms": -15.5,
+   "peak": -3.8,
+   "stereo": false,
+   "kbps": 96
+  },
+  "sfx_obsidian_hit.mp3": {
+   "bytes": 7210,
+   "dur": 0.556,
+   "src": "razor_sharp_steel_bl #4",
+   "rms": -14.6,
+   "peak": -1.0,
+   "stereo": false,
+   "kbps": 96
+  },
+  "sfx_hero_effort_light_01.mp3": {
+   "bytes": 5485,
+   "dur": 0.354,
+   "src": "short_tight_masculin #1",
+   "rms": -15.5,
+   "peak": -2.4,
+   "stereo": false,
+   "kbps": 112
+  },
+  "sfx_hero_effort_light_02.mp3": {
+   "bytes": 5851,
+   "dur": 0.385,
+   "src": "short_tight_masculin #2",
+   "rms": -16.0,
+   "peak": -1.0,
+   "stereo": false,
+   "kbps": 112
+  },
+  "sfx_hero_effort_light_03.mp3": {
+   "bytes": 5485,
+   "dur": 0.35,
+   "src": "short_tight_masculin #3",
+   "rms": -15.5,
+   "peak": -1.2,
+   "stereo": false,
+   "kbps": 112
+  },
+  "sfx_hero_effort_heavy_01.mp3": {
+   "bytes": 13165,
+   "dur": 0.9,
+   "src": "brief_heavy_masculin #4",
+   "rms": -15.6,
+   "peak": -1.0,
+   "stereo": false,
+   "kbps": 112
+  },
+  "sfx_hero_effort_heavy_02.mp3": {
+   "bytes": 13165,
+   "dur": 0.9,
+   "src": "brief_heavy_masculin #2",
+   "rms": -15.5,
+   "peak": -1.0,
+   "stereo": false,
+   "kbps": 112
+  },
+  "sfx_hero_barbarian_roar_01.mp3": {
+   "bytes": 20114,
+   "dur": 1.4,
+   "src": "fierce_muscular_prim #1",
+   "rms": -15.5,
+   "peak": -3.8,
+   "stereo": false,
+   "kbps": 112
+  },
+  "sfx_hero_barbarian_roar_02.mp3": {
+   "bytes": 20114,
+   "dur": 1.4,
+   "src": "fierce_muscular_prim #4",
+   "rms": -15.5,
+   "peak": -5.1,
+   "stereo": false,
+   "kbps": 112
+  },
+  "sfx_hero_hit_light_01.mp3": {
+   "bytes": 7314,
+   "dur": 0.487,
+   "src": "short_sharp_masculin #4",
+   "rms": -13.5,
+   "peak": -1.7,
+   "stereo": false,
+   "kbps": 112
+  },
+  "sfx_hero_hit_light_02.mp3": {
+   "bytes": 5485,
+   "dur": 0.347,
+   "src": "short_sharp_masculin #2",
+   "rms": -13.7,
+   "peak": -1.0,
+   "stereo": false,
+   "kbps": 112
+  },
+  "sfx_hero_hit_light_03.mp3": {
+   "bytes": 6217,
+   "dur": 0.412,
+   "src": "short_sharp_masculin #1",
+   "rms": -14.4,
+   "peak": -1.0,
+   "stereo": false,
+   "kbps": 112
+  },
+  "sfx_hero_hit_heavy_01.mp3": {
+   "bytes": 23405,
+   "dur": 1.635,
+   "src": "heavy_breathless_mas #3",
+   "rms": -13.9,
+   "peak": -1.0,
+   "stereo": false,
+   "kbps": 112
+  },
+  "sfx_hero_hit_heavy_02.mp3": {
+   "bytes": 30354,
+   "dur": 2.117,
+   "src": "heavy_breathless_mas #2",
+   "rms": -13.5,
+   "peak": -3.7,
+   "stereo": false,
+   "kbps": 112
+  },
+  "sfx_hero_death_01.mp3": {
+   "bytes": 48640,
+   "dur": 3.429,
+   "src": "heroic_masculine_war #4",
+   "rms": -13.6,
+   "peak": -1.0,
+   "stereo": false,
+   "kbps": 112
+  },
+  "sfx_hero_death_02.mp3": {
+   "bytes": 42788,
+   "dur": 3.018,
+   "src": "heroic_masculine_war #1",
+   "rms": -13.5,
+   "peak": -1.1,
+   "stereo": false,
+   "kbps": 112
+  },
+  "sfx_wolf_attack_01.mp3": {
+   "bytes": 40542,
+   "dur": 2.5,
+   "src": "ferocious_wild_wolf_ #2",
+   "rms": -15.5,
+   "peak": -2.3,
+   "stereo": true,
+   "kbps": 128
+  },
+  "sfx_wolf_attack_02.mp3": {
+   "bytes": 40542,
+   "dur": 2.5,
+   "src": "ferocious_wild_wolf_ #4",
+   "rms": -15.7,
+   "peak": -1.0,
+   "stereo": true,
+   "kbps": 128
+  },
+  "sfx_rhino_charge_01.mp3": {
+   "bytes": 56424,
+   "dur": 3.5,
+   "src": "massive_furious_preh #3",
+   "rms": -15.5,
+   "peak": -5.8,
+   "stereo": true,
+   "kbps": 128
+  },
+  "sfx_rhino_charge_02.mp3": {
+   "bytes": 56424,
+   "dur": 3.5,
+   "src": "massive_furious_preh #1",
+   "rms": -15.5,
+   "peak": -5.1,
+   "stereo": true,
+   "kbps": 128
+  },
+  "sfx_bear_roar_01.mp3": {
+   "bytes": 53916,
+   "dur": 3.323,
+   "src": "enormous_angry_grizz #1",
+   "rms": -13.5,
+   "peak": -2.0,
+   "stereo": true,
+   "kbps": 128
+  },
+  "sfx_bear_roar_02.mp3": {
+   "bytes": 49319,
+   "dur": 3.044,
+   "src": "enormous_angry_grizz #2",
+   "rms": -13.5,
+   "peak": -3.9,
+   "stereo": true,
+   "kbps": 128
+  },
+  "sfx_tiger_roar_01.mp3": {
+   "bytes": 69381,
+   "dur": 4.3,
+   "src": "massive_Siberian_tig #4",
+   "rms": -13.5,
+   "peak": -2.5,
+   "stereo": true,
+   "kbps": 128
+  },
+  "sfx_tiger_roar_02.mp3": {
+   "bytes": 40124,
+   "dur": 2.46,
+   "src": "massive_Siberian_tig #3",
+   "rms": -13.5,
+   "peak": -1.0,
+   "stereo": true,
+   "kbps": 128
+  },
+  "sfx_beast_death.mp3": {
+   "bytes": 56424,
+   "dur": 3.5,
+   "src": "massive_wild_apex_pr #3",
+   "rms": -13.5,
+   "peak": -3.6,
+   "stereo": true,
+   "kbps": 128
+  },
+  "sfx_beast_boss_death.mp3": {
+   "bytes": 48065,
+   "dur": 2.963,
+   "src": "enormous_prehistoric #1",
+   "rms": -13.5,
+   "peak": -1.0,
+   "stereo": true,
+   "kbps": 128
+  },
+  "sfx_bow_full_01.mp3": {
+   "bytes": 34377,
+   "dur": 2.428,
+   "src": "heavy_wooden_warbow_ #3",
+   "rms": -16.1,
+   "peak": -1.0,
+   "stereo": false,
+   "kbps": 112
+  },
+  "sfx_bow_full_02.mp3": {
+   "bytes": 40960,
+   "dur": 2.885,
+   "src": "heavy_wooden_warbow_ #1",
+   "rms": -16.2,
+   "peak": -1.0,
+   "stereo": false,
+   "kbps": 112
+  },
+  "sfx_bow_shoot_01.mp3": {
+   "bytes": 23040,
+   "dur": 1.6,
+   "src": "heavy_wooden_hunting #4",
+   "rms": -17.3,
+   "peak": -1.0,
+   "stereo": false,
+   "kbps": 112
+  },
+  "sfx_bow_shoot_02.mp3": {
+   "bytes": 6583,
+   "dur": 0.428,
+   "src": "heavy_wooden_hunting #1",
+   "rms": -15.5,
+   "peak": -1.7,
+   "stereo": false,
+   "kbps": 112
+  },
+  "sfx_bow_draw.mp3": {
+   "bytes": 14628,
+   "dur": 1.0,
+   "src": "heavy_wooden_warbow_ #3",
+   "rms": -16.5,
+   "peak": -1.0,
+   "stereo": false,
+   "kbps": 112
+  },
+  "sfx_arrow_volley.mp3": {
+   "bytes": 43467,
+   "dur": 2.68,
+   "src": "massive_volley_of_do #4",
+   "rms": -15.5,
+   "peak": -2.2,
+   "stereo": true,
+   "kbps": 128
+  },
+  "sfx_rifle_shot_01.mp3": {
+   "bytes": 16823,
+   "dur": 1.15,
+   "src": "vintage_early_1900s_ #4",
+   "rms": -14.9,
+   "peak": -1.0,
+   "stereo": false,
+   "kbps": 112
+  },
+  "sfx_rifle_shot_02.mp3": {
+   "bytes": 21943,
+   "dur": 1.521,
+   "src": "vintage_early_1900s_ #1",
+   "rms": -13.6,
+   "peak": -1.0,
+   "stereo": false,
+   "kbps": 112
+  },
+  "sfx_pistol_shot.mp3": {
+   "bytes": 8411,
+   "dur": 0.55,
+   "src": "vintage_early_1900s_ #2",
+   "rms": -14.1,
+   "peak": -1.0,
+   "stereo": false,
+   "kbps": 112
+  },
+  "sfx_enemy_katana_hurt_01.mp3": {
+   "bytes": 10240,
+   "dur": 0.679,
+   "src": "razor_sharp_katana_b #2",
+   "rms": -16.6,
+   "peak": -1.0,
+   "stereo": false,
+   "kbps": 112
+  },
+  "sfx_enemy_katana_hurt_02.mp3": {
+   "bytes": 12434,
+   "dur": 0.858,
+   "src": "razor_sharp_katana_b #1",
+   "rms": -15.5,
+   "peak": -1.0,
+   "stereo": false,
+   "kbps": 112
+  },
+  "sfx_enemy_bullet_hurt_01.mp3": {
+   "bytes": 10240,
+   "dur": 0.703,
+   "src": "heavy_dull_bullet_im #4",
+   "rms": -15.5,
+   "peak": -1.0,
+   "stereo": false,
+   "kbps": 112
+  },
+  "sfx_enemy_bullet_hurt_02.mp3": {
+   "bytes": 12434,
+   "dur": 0.845,
+   "src": "heavy_dull_bullet_im #3",
+   "rms": -15.5,
+   "peak": -1.0,
+   "stereo": false,
+   "kbps": 112
+  },
+  "sfx_boss_general_death_01.mp3": {
+   "bytes": 46811,
+   "dur": 2.878,
+   "src": "deep_masculine_warri #3",
+   "rms": -15.5,
+   "peak": -3.5,
+   "stereo": true,
+   "kbps": 128
+  },
+  "sfx_boss_general_death_02.mp3": {
+   "bytes": 58096,
+   "dur": 3.6,
+   "src": "deep_masculine_warri #1",
+   "rms": -15.5,
+   "peak": -4.1,
+   "stereo": true,
+   "kbps": 128
+  },
+  "sfx_soldier_down.mp3": {
+   "bytes": 6269,
+   "dur": 0.35,
+   "src": "deep_masculine_warri #3",
+   "rms": -15.5,
+   "peak": -4.1,
+   "stereo": true,
+   "kbps": 128
+  },
+  "sfx_cavalry_hooves_loop.mp3": {
+   "bytes": 67709,
+   "dur": 4.2,
+   "src": "massive_horde_of_hun #4",
+   "rms": -19.0,
+   "peak": -3.7,
+   "stereo": true,
+   "kbps": 128
+  },
+  "sfx_cavalry_charge.mp3": {
+   "bytes": 56424,
+   "dur": 3.5,
+   "src": "fierce_armored_caval #3",
+   "rms": -17.7,
+   "peak": -1.0,
+   "stereo": true,
+   "kbps": 128
+  },
+  "sfx_cavalry_horn.mp3": {
+   "bytes": 64783,
+   "dur": 4.0,
+   "src": "ominous_deep_ancient #3",
+   "rms": -16.0,
+   "peak": -5.8,
+   "stereo": true,
+   "kbps": 128
+  },
+  "sfx_army_warcry_01.mp3": {
+   "bytes": 64783,
+   "dur": 4.0,
+   "src": "hundreds_of_ancient_ #4",
+   "rms": -19.0,
+   "peak": -7.0,
+   "stereo": true,
+   "kbps": 128
+  },
+  "sfx_army_warcry_02.mp3": {
+   "bytes": 64783,
+   "dur": 4.0,
+   "src": "hundreds_of_ancient_ #2",
+   "rms": -19.0,
+   "peak": -5.5,
+   "stereo": true,
+   "kbps": 128
+  },
+  "sfx_nomad_horde_cry_01.mp3": {
+   "bytes": 72724,
+   "dur": 4.5,
+   "src": "terrifying_horde_of_ #2",
+   "rms": -19.0,
+   "peak": -5.1,
+   "stereo": true,
+   "kbps": 128
+  },
+  "sfx_nomad_horde_cry_02.mp3": {
+   "bytes": 72724,
+   "dur": 4.5,
+   "src": "terrifying_horde_of_ #1",
+   "rms": -19.0,
+   "peak": -5.2,
+   "stereo": true,
+   "kbps": 128
+  },
+  "sfx_nomad_chant_loop.mp3": {
+   "bytes": 75650,
+   "dur": 4.7,
+   "src": "menacing_army_of_anc #3",
+   "rms": -19.0,
+   "peak": -6.0,
+   "stereo": true,
+   "kbps": 128
+  },
+  "sfx_nomad_ambush_cry_01.mp3": {
+   "bytes": 39706,
+   "dur": 2.446,
+   "src": "sudden_chilling_noma #1",
+   "rms": -16.0,
+   "peak": -5.6,
+   "stereo": true,
+   "kbps": 128
+  },
+  "sfx_nomad_ambush_cry_02.mp3": {
+   "bytes": 33854,
+   "dur": 2.073,
+   "src": "sudden_chilling_noma #2",
+   "rms": -16.0,
+   "peak": -6.8,
+   "stereo": true,
+   "kbps": 128
+  },
+  "sfx_buddha_emille_bell.mp3": {
+   "bytes": 80666,
+   "dur": 5.0,
+   "src": "giant_ancient_Korean #2",
+   "rms": -13.5,
+   "peak": -1.0,
+   "stereo": true,
+   "kbps": 128
+  },
+  "sfx_buddha_light_aura.mp3": {
+   "bytes": 64783,
+   "dur": 4.0,
+   "src": "warm_radiant_golden_ #1",
+   "rms": -19.0,
+   "peak": -7.6,
+   "stereo": true,
+   "kbps": 128
+  }
+ }
+}
