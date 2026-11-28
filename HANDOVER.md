@@ -13,7 +13,7 @@
 | 항목 | 내용 |
 |---|---|
 | 무엇 | 한국사 6시대 횡스크롤 액션(벨트스크롤) 웹게임. React 18 단일 `index.html` + 원화 · 효과음 `assets/` |
-| 최신 빌드 | **`shinsi-R38/`**(R37 + R38-1 패치 28곳 · 에셋 변경 없음 — 16절) · 직전 `shinsi-R37/` (R36.5-2 + 패치 48곳 · 새 효과음 MP3 64 + 표 · MANIFEST 520항목 — **저장소 미반영**, 15절) · 직전 `shinsi-R36.5-2/`(MANIFEST 455) |
+| 최신 빌드 | **`shinsi-R38-2/`**(R38 + R38-2A 패치 21곳 — 16절) · 그 전 `shinsi-R38/`(R37 + R38-1 패치 28곳 · 에셋 변경 없음 — 16절) · 직전 `shinsi-R37/` (R36.5-2 + 패치 48곳 · 새 효과음 MP3 64 + 표 · MANIFEST 520항목 — **저장소 미반영**, 15절) · 직전 `shinsi-R36.5-2/`(MANIFEST 455) |
 | 플레이 | **R37 https://claude.ai/artifact/6o4E1jES1aXqxfDCjPE7jc** · R36.5-2 https://claude.ai/artifact/FgvndJmipef8BGKyU82Yvf · R36.5 https://claude.ai/artifact/RxAoQ8Gfhsc5fusv9hGU1d · R36 https://claude.ai/artifact/3aXmHDQY6Xp9afZoqtQAAc · R35 https://claude.ai/artifact/LrkMYxn8GL64Gnz3S5hC3r · R34 https://claude.ai/artifact/MrnPp3LH717EsSYDFqQ3tP · R33 https://claude.ai/artifact/8DRtahb3dDRZLTKh9FyPd5 (비공개 — 오너가 Share 메뉴로 공유) · 음향 점검 https://claude.ai/artifact/QSg43hGAD1mgJALZhnyZMT |
 | 저장소 · 브랜치 | `resurrectionlazarus-stack/Um-korean-history-game` · 작업 브랜치 **`claude/r23-attack-walk-visibility-mob-ocesrz`** (여기에만 커밋 · 푸시) |
 | main 병합 | **하지 않음**(실기기 확인 뒤 오너 지시가 있을 때만) · PR도 요청이 있을 때만 |
@@ -418,6 +418,7 @@ cd tools/r33 && node r33func.js /tmp/r33out 8033 && node load33.js 8033
 - **보존 검증 도구**: `python3 -I tools/r38/guard38.py <이전 빌드> <새 빌드>` — 권율 걸음걸이 9구간 · era5 스프라이트 · R37 엔진/훅 · assets/sfx · MANIFEST · 고정 상수 해시 비교. 다음 단계에서도 그대로 쓴다(`shinsi-R38 shinsi-R38-2`).
 - **이 PC(built-in 브라우저) 테스트 요령**(7절 보충): 창(pane)이 가려지면 게임이 `document.hidden`으로 자동 일시정지하고 rAF가 멈춘다 → `tools/r38/shim38_console.js`(rAF 하이브리드 대체 · visibilitychange/blur 차단 · setHalt · 틱 기준 대기)를 먼저 붙인 뒤 `func38_console.js` · `load38_console.js`. 부하 수치는 창이 보일 때(실제 rAF · 타이머 콜백 0)만 유효. 같은 빌드도 25~56fps · 11~22ms로 흔들리므로 빌드 비교는 번갈아 반복 · 같은 페이지 A/B(`r38mode`)로. 대기 루프는 10초 상한.
 - **부하 판정**: R38-1은 **조건부 통과**(`R38-handoff.md` 4절 — 이펙트 JS 그리기 0.5ms/프레임 이하 · 켬/끔 차이가 측정 편차 안 · 55fps 미달은 R37도 같은 PC 한계). 정식 판정은 클라우드 하네스 또는 실기기.
+- **R38-2A(입력 잠김 · 밸런스 · 로밍 — `R38-handoff.md` 7절)**: `shinsi-R38/index.html` + `tools/r38-2/r38_2_patch.py` = `shinsi-R38-2/index.html`(21곳). ① 입력 잠김의 원인은 질풍연참 중 어퍼(L)가 `pendingHit` 한 칸을 덮어 연참 마무리 콜백(`p.rush = null`)이 사라지는 것 → 어퍼에 rush/plunge 가드 · `queueActiveFrame`은 취소 불가 콜백을 덮어쓰지 않음 · 키 판정은 `e.code` 우선(`r38KeyNorm` — 한/영 전환에도 삼) · 틱 감시 `r38LockWatch`(rush · plunge · special · attackTimer · pendingHit · guard · grab · buffer 상한) + `__RELIC_DEV.r38lock()`. **pendingHit은 한 칸뿐이다 — 취소 불가 콜백이 걸린 동안 다른 기술을 넣을 때는 반드시 입구 가드를 둘 것.** ② 밸런스 손잡이 `R38_HP_K`(mob 2.2 · mid 1.5 · boss 1.35 · 1시대 곰 hpMult 24) · `R38_MOB_CD_K` 0.85 · `R38_MID_CD` 0.72 · `ACTIVE_CAP` 전 시대 7(4-4절 보충). ③ 로밍 스폰 `r38Roam`(ROAM/GO 틱 · `R38_ROAM_PTS` · 동시 4명 · `eraKillGoal` +21). 회귀 테스트 `tools/r38-2/lock38_console.js`.
 
 ## 9. 라운드 연혁(무엇이 어디서 바뀌었나)
 
@@ -439,5 +440,6 @@ cd tools/r33 && node r33func.js /tmp/r33out 8033 && node load33.js 8033
 | R36 | e0cefb0 | 짐승의 기척 · 갈래 기술(오너 직접 피드백): 둔기 타격음 '퍽' 4종 · 짐승 울음 10 · 병사 함성 1 · 연타 갈래 기술 4종(올려치기 · 공중 추격 · 내려찍기 · 관통 돌진) · 오른손 파지 미술 발주서(R36.5에서 철회) |
 | R36.5 | 29564ff | 무기를 쥔 손을 왼손답게(오너 직접 피드백): 무기 그림 9장 — 옛 엄지 지움 · 엄지를 앞에 얹음 · 1시대 손톱. 코드 변경 없음 |
 | R36.5-2 | 02445a0 | 무기를 쥔 손의 비율(오너 직접 피드백): 무기 그림 9장의 손을 몸 원화의 주먹으로 교체(같은 크기) · 1시대 자루 가늘게 · 2 · 4시대 건틀릿 → 맨주먹. 코드 변경 없음. 새 방 인수인계서 `NEXT-SESSION.md` |
-| R38-1 | 로컬 `d12cab1`(r38-1) · GitHub 백업은 오너가 | 맵 1.5배(월드 9600 · 구역 카메라 · Z1~Z3 1.5화면 추적) · 치트키급 과밀 이펙트 엔진(고정 풀 2 · 틱당 예산 · 밀도 계수 · 타격/처치/각성/구역 훅) · 파티클 상한 ↑ · 보존 검증 guard38 · 콘솔 테스트 shim. 에셋 변경 없음 · 부하 조건부 통과(16절) |
+| R38-2A | (미커밋 — 오너가 직접) | 입력 잠김 수정(질풍연참 중 어퍼의 pendingHit 덮어쓰기 · `e.code` 키 정규화 · 틱 감시) · 일반 몹 체력 ×2.2 · 중간보스 ×1.5 · 보스 ×1.35 · 공격 간격 ×0.85 · 전 시대 CAP 7 · 구역 사이 로밍 스폰 21 · 격파 목표 +21 · 회귀 테스트 lock38(16절) |
+| R38-1 | 로컬 `3105957`(r38-1 complete) · GitHub 백업은 오너가 | 맵 1.5배(월드 9600 · 구역 카메라 · Z1~Z3 1.5화면 추적) · 치트키급 과밀 이펙트 엔진(고정 풀 2 · 틱당 예산 · 밀도 계수 · 타격/처치/각성/구역 훅) · 파티클 상한 ↑ · 보존 검증 guard38 · 콘솔 테스트 shim. 에셋 변경 없음 · 부하 조건부 통과(16절) |
 | R37 | GitHub `r37-sfx` 3c91f96(오너 백업) | 리얼리티 효과음(음향감독 발주서): 녹음 104개 → MP3 64개(트림 · 정규화 · EQ · 심리스 루프 · 파생 4) + Web Audio 엔진 `createR37Sfx`(변주 · 쿨다운 · 패닝 · 덕킹 · 시대별 preload · 디코더 지연 보정) + 연동 48곳(타격 · 기합 · 피격 · 사망 · 적 · 궁수 · 화살비 · 기병 · 부처님). Windows PC에서 제작 · 부하 판정 보류 |

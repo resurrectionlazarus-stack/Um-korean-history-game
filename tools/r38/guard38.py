@@ -71,10 +71,11 @@ print("== ② 표식 · 호출 수 ==")
 ta, tb = "\n".join(LA), "\n".join(LB)
 for label, pat in [("[R37] 표식", r"\[R37\]"), ("r37 훅 호출(r37Hit · r37Effort · r37EnemyDown · r37BossDeath · r37WarCry · r37Step)", r"\br37(Hit|Effort|EnemyDown|BossDeath|WarCry|Step)\("), ("createR37Sfx 등장", r"createR37Sfx"), ("r37preload 호출", r"r37preload\(")]:
     ca, cb = len(re.findall(pat, ta)), len(re.findall(pat, tb))
-    ok = ca == cb
+    # 훅 호출은 새 자리가 늘어나는 것은 허용(R38-2A 로밍 스폰의 r37WarCry 등) · 줄어들면 FAIL. 엔진 · preload 등장 수는 같아야 함
+    ok = cb >= ca if label.startswith("r37 훅 호출") else ca == cb
     if not ok:
         fails.append(label)
-    print(f"{'PASS' if ok else 'FAIL'}  {label}: R37 {ca} · R38 {cb}")
+    print(f"{'PASS' if ok else 'FAIL'}  {label}: 이전 {ca} · 새 빌드 {cb}{' (+' + str(cb - ca) + ' 새 호출 자리)' if cb > ca else ''}")
 n38 = len(re.findall(r"\[R38\]", tb))
 print(f"INFO  [R38] 표식 전체: {n38} · R38 index.html {len(LB)}줄 (R37 {len(LA)}줄)")
 
@@ -109,7 +110,7 @@ for label, sub, pat in [("권율 스프라이트 assets/hero/era5_hero_*", "asse
     print(f"{'PASS' if ok else 'FAIL'}  {label}: {len(xa)}개 {'모두 동일' if ok else '다름 ' + ', '.join(diff[:8])}")
 
 print("== ④ 고정 상수 ==")
-for label, pat in [("VIEW_W 960", r"var VIEW_W = 960;"), ("VIEW_H 540", r"var VIEW_H = 540;"), ("HORIZON 335", r"var HORIZON = 335;"), ("LO_RES 0.5", r"var LO_RES = 0\.5;"), ("ASSET_VIEW_SCALE 0.5", r"var ASSET_VIEW_SCALE = 0\.5;"), ("STEP_MS 1/60", r"var STEP_MS = 1e3 / 60;"), ("ACTIVE_CAP 2 · 4시대 7", r"var ACTIVE_CAP = \{ 2: 7, 4: 7 \};"), ("ASSET_PAR far/mid/ground", r"var ASSET_PAR = \{ far: 0\.15, mid: 0\.45, ground: 1 \};"), ("R31_HFX_N 128(옛 풀 그대로)", r"var R31_HFX_N = 128;"), ("ctx.filter 사용 0(검사용 feature-detect 1건 제외)", None)]:
+for label, pat in [("VIEW_W 960", r"var VIEW_W = 960;"), ("VIEW_H 540", r"var VIEW_H = 540;"), ("HORIZON 335", r"var HORIZON = 335;"), ("LO_RES 0.5", r"var LO_RES = 0\.5;"), ("ASSET_VIEW_SCALE 0.5", r"var ASSET_VIEW_SCALE = 0\.5;"), ("STEP_MS 1/60", r"var STEP_MS = 1e3 / 60;"), ("ACTIVE_CAP 2 · 4시대 7(R38-2A부터 전 시대 7 허용)", r"var ACTIVE_CAP = \{ 2: 7, (?:3: 7, )?4: 7(?:, 5: 7, 6: 7)? \};"), ("ASSET_PAR far/mid/ground", r"var ASSET_PAR = \{ far: 0\.15, mid: 0\.45, ground: 1 \};"), ("R31_HFX_N 128(옛 풀 그대로)", r"var R31_HFX_N = 128;"), ("ctx.filter 사용 0(검사용 feature-detect 1건 제외)", None)]:
     if pat is None:
         ca = len(re.findall(r"\.filter = \"blur\(", ta))
         cb = len(re.findall(r"\.filter = \"blur\(", tb))

@@ -1,4 +1,4 @@
-# R38-1단계 인수인계 — 맵 1.5배 + 치트키급 과밀 이펙트 + 60fps 방어
+# R38 인수인계 — 1단계(맵 1.5배 + 치트키급 과밀 이펙트 + 60fps 방어 · 1~6절) · 2A단계(입력 잠김 수정 + 전투 밸런스 + 로밍 스폰 · 7절)
 
 - 빌드: `shinsi-R38/` = `shinsi-R37/` 복사 + `tools/r38/r38_patch.py`(문자열 치환 28곳 · `[R38]` 표식 24). **에셋 변경 없음**(MANIFEST 520 = 디스크 520 · assets/sfx 5.912MB 그대로).
 - 적용: `cp shinsi-R37/index.html shinsi-R38/index.html && python -I tools/r38/r38_patch.py shinsi-R38/index.html` (Windows: `powershell -File tools/r37/run_py.ps1 tools/r38/r38_patch.py shinsi-R38/index.html`).
@@ -63,3 +63,47 @@
 ## 6. 파일
 
 `shinsi-R38/`(index.html 패치 · README 맨 위 'R38에서 바뀐 것') · `tools/r38/r38_patch.py` · `r38_fx.js` · `guard38.py` · `shim38_console.js` · `func38_console.js` · `load38_console.js` · 이 문서 · `NEXT-SESSION.md` · `HANDOVER.md` 16절.
+
+## 7. R38-2A단계 — 입력 잠김 수정 + 전투 밸런스 + 로밍 스폰(2026-11-28 · 실플레이 피드백)
+
+- 빌드: `shinsi-R38-2/` = `shinsi-R38/` 복사 + `tools/r38-2/r38_2_patch.py`(문자열 치환 21곳 · `[R38-2A]` 표식 23). **에셋 변경 없음.** 적용: `cp shinsi-R38/index.html shinsi-R38-2/index.html && python -I tools/r38-2/r38_2_patch.py shinsi-R38-2/index.html`.
+- 보존: `python -I tools/r38/guard38.py shinsi-R38 shinsi-R38-2` → **PASS**(권율 9구간 · 스프라이트 12 · R37 엔진/훅 · 효과음 122 · MANIFEST 520 · 고정 상수). guard38은 r37 훅 호출 수를 '줄지 않음'으로, `ACTIVE_CAP`는 전 시대 7 형태도 허용하도록 고쳤다(로밍 스폰이 `r37WarCry`를 새로 부름 · CAP 변경은 의도).
+- 주인공 신규 동작 · 1.5배 구간 스토리 · 대사는 **R38-2B**로 분리(7-5절). 커밋 · 푸시 · zip은 오너가 직접.
+
+### 7-1. 입력 잠김(평타 · 일부 공격 키 무반응) — 원인과 수정
+
+| 원인(코드) | 수정 |
+|---|---|
+| A. 질풍연참(`rushSlash`)의 마무리 콜백(취소 불가 `pendingHit`)이 `p.rush`를 풀어 주는데, 연참 중 어퍼(L · `triggerEraUpperSkill`)가 `queueActiveFrame`으로 그 한 칸을 덮어써 콜백이 사라짐 → `p.rush` 영구 고착 → `triggerEraWeaponCombo`(J) · `triggerEraDashSkill`(K)이 입구 `if (p.rush …) return`에서 막힘. L만 살아 있음 | 어퍼 입구에 `p.rush \|\| p.plunge` 가드(돌진과 동일) · `queueActiveFrame`은 취소 불가 콜백이 걸려 있으면 일반 공격 · 기술이 덮어쓰지 못함(`queueRefused` 카운터) · `startRush`가 시작 틱을 기록 |
+| B. 키 판정이 `e.key`뿐 → 한/영 전환 뒤 글자 키(J K L U I E Q WASD) 전부 무시(Space · 방향키만 삼) | `r38KeyNorm(e)`: `e.code`(KeyJ → j · Digit1 → 1) 우선 · `e.key` 폴백 — keydown · keyup 둘 다. blur 때 `bufferAtk`도 해제 |
+| C. 비정상 지연 시 자동 복구 없음 | 틱 감시 `r38LockWatch`(주인공 갱신 · pendingHit 처리 앞): rush 150틱 · plunge 지상 20틱 · special 240틱 · attackTimer > max + 40 · pendingHit 120틱 · guardTimer 180틱 · 죽은 적을 잡은 grab · bufferAtk 60틱 → 즉시 해제 + `g.r38lock` 카운터(`__RELIC_DEV.r38lock()` = 카운터 + 지금 플래그) |
+
+회귀 테스트 `tools/r38-2/lock38_console.js`(shim38 뒤 · 8044 · 틱 기준) — 모두 PASS: **lock**(Lv.5 4시대 · `comboStep 4` + J로 연참 시작 → 곧바로 L → `upperDuringRush 1` · 29틱 뒤 `p.rush` 해제 · J 응답 attackTimer 9) · **ime**(key "ㅓ" + code KeyJ → `lastAtkPress` 갱신 · attackTimer 11) · **cycle**(J 20연타 · K · E · 일시정지 2회 · 좌우 전환 뒤 J 응답 · rush/plunge/special/grab 없음 · guardTimer 0) · **watchdog**(rush · attackTimer 999 · special을 강제로 고착 → 3틱 안 해제 · 카운터 각 1).
+
+### 7-2. 밸런스(전투력 비례 모델은 그대로 · 배율만)
+
+| 항목 | R38 | R38-2A | 비고 |
+|---|---|---|---|
+| 일반 몹 체력 | `R27_MOB_HP_K` 0.72 | × `R38_HP_K.mob` 2.2 | 4시대 Lv.5 ATK 700(무기 보너스 0) 표본: 거란 보병 10,220 → **22,483** · 여진 도끼병 8,254 → **18,159**(이전 값은 ÷2.2 계산값) — 1콤보 → 2~3콤보 |
+| 중간보스 / 시대 보스 체력 | — | × 1.5 / × 1.35 | 1시대 곰 `hpMult` 16 → 24 · `applyHardcoreStageScaling` 한 줄로 1시대 포함 |
+| 일반 몹 공격 간격 | 46~75틱(스폰) · 재장전 `UNIT_CD`/58~77 | × `R38_MOB_CD_K` 0.85 → 39~64틱(표본 49 · 51) | 재장전 2곳 · 1시대 짐승(`baseAttackCd`)도 · 기병 돌격 · 기관총 간격은 그대로(정수 반올림 — `attackCooldown === 18` 예고 판정 보존) |
+| 중간보스 공격 간격 | 0.78배 | `R38_MID_CD` 0.72배 | 시대 보스 `R25_BOSS_CD` 0.7 그대로 |
+| `ACTIVE_CAP` | {2:7, 4:7} | 전 시대 7 | 3 · 5 · 6시대 Z3(8명)도 대기열 — 60fps 보호 |
+| 적 공격력 `ERA_DIFF` · 피격 배율 2.6 · 웨이브 표 | 그대로 | 그대로 | 어린이 기준 불합리 회피 |
+| 격파 목표(4시대) | 67 | **88** | 로밍 21 가산(`eraKillGoal`) |
+
+### 7-3. 로밍 스폰(맵 1.5배 체감 보강)
+
+- 구역 zi(1~3)로 가는 길에서 '앞 구역 범위 끝(`ZONE_CAM[zi-1] + span`) ~ 트리거(`ZONE_TRIG[zi]`)' 비율 지점 `R38_ROAM_PTS` = Z1→Z2 [0.35, 0.7] · Z2→Z3 [0.35, 0.7] · Z3→Z4 [0.3, 0.55, 0.8]을 주인공이 넘으면 오른쪽 화면 밖(+70 · +130) 증원 2 + 왼쪽 화면 밖(−80) 매복 1. 동시 로밍 `R38_ROAM_CAP` 4명 상한 · 카메라 잠금 없음 · 1시대 늑대 · 하이에나 · 2시대+ 로스터(`pickRosterUnit`) · 경보 `r37WarCry`/`alarm`. 적에 `roam` 표식 · `g.r38roamLog` · `__RELIC_DEV.r382()`.
+- 검증(4시대 Z1→Z2): 첫 지점 x 2330 통과 → 3명(여진 도끼병 · 여진 기병 · 여진 도끼병) 모두 화면 밖(2905 · 2960 / 1817 · 카메라 1909) · 둘째 지점 → 상한으로 1명만 추가(총 4) · 로그 2. 1단계 `func38` 4항목(맵 · 카메라 · 이펙트 처치 3/3 · 권율 run→run8 박자 3.52) · 콘솔 에러 0 그대로.
+- 6초 부하: 2A는 그리기 코드 변경이 없어 1단계 조건부 통과를 그대로 둔다(체력 ↑로 전투가 길어질 뿐 · ACTIVE_CAP 7 유지).
+
+### 7-4. 손잡이
+
+`R38_HP_K`(mob · mid · boss) · `R38_MOB_CD_K` · `R38_MID_CD` · `ACTIVE_CAP` · `R38_ROAM_PTS` · `R38_ROAM_N`(3) · `R38_ROAM_CAP`(4) · `R38_ROAM_TOTAL`(21 = 7지점 × 3 — PTS · N을 바꾸면 같이) · `R38_LOCK_MAX`(감시 상한). 오너 체감 확인 뒤 과하면 `R38_HP_K`와 `R38_MOB_CD_K`만 낮춘다.
+
+### 7-5. R38-2B 진입 안내
+
+- 범위: 주인공 신규 동작 확장(`heroAtkPlan` · `heroAttackPose` · `r36Branch` · `startRush` — 권율 걸음걸이 구간은 그대로) + 1.5배 구간용 추가 스토리 · 대사 스크립트(로밍 지점의 단비 해설 · 매복 경고 말풍선 — `r38Roam`의 로그 자리에 `setCompanionBubble` 훅을 두면 됨).
+- 시작: `shinsi-R38-2/` 복사 → `shinsi-R38-2B/` + `tools/r38-2b/r38_2b_patch.py`(R38-2 index.html 위) → 보존 검증 `guard38.py shinsi-R38-2 shinsi-R38-2B` → 테스트 shim38 + func38 + lock38 재사용(8045 포트 하나).
+- 오너 확인 부탁(8044): 2~3콤보 체감 · 중간보스 길이 · 로밍 템포. 그 뒤 3단계(guard/guardUp/패링 소리 2차 + 6초 부하 정식 판정).
