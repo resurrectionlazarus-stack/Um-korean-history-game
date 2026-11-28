@@ -122,6 +122,14 @@ for label, pat in [("VIEW_W 960", r"var VIEW_W = 960;"), ("VIEW_H 540", r"var VI
         fails.append(label)
     print(f"{'PASS' if ok else 'FAIL'}  {label}: R37 {ca} · R38 {cb}")
 
+print("== ⑤ R38-2A 밸런스 · 로밍 상수(둘 다 있으면 같아야 하고, 둘 다 없으면 통과) ==")
+for label, pat in [("R38_HP_K mob 2.2 · mid 1.5 · boss 1.35", r"var R38_HP_K = \{ mob: 2\.2, mid: 1\.5, boss: 1\.35 \};"), ("R38_MOB_CD_K 0.85", r"var R38_MOB_CD_K = 0\.85;"), ("R38_MID_CD 0.72", r"var R38_MID_CD = 0\.72;"), ("R38_ROAM_N 3", r"var R38_ROAM_N = 3;"), ("R38_ROAM_CAP 4", r"var R38_ROAM_CAP = 4;"), ("R38_ROAM_TOTAL 21", r"var R38_ROAM_TOTAL = 21;"), ("R38_ROAM_PTS 7지점", r"var R38_ROAM_PTS = \[\[\], \[0\.35, 0\.7\], \[0\.35, 0\.7\], \[0\.3, 0\.55, 0\.8\]\];")]:
+    ca, cb = len(re.findall(pat, ta)), len(re.findall(pat, tb))
+    ok = ca == cb and ca <= 1
+    if not ok:
+        fails.append(label)
+    print(f"{'PASS' if ok else 'FAIL'}  {label}: 이전 {ca} · 새 빌드 {cb}")
+
 print()
 print("RESULT", "PASS — 보존 구간 · 에셋 · 상수 모두 동일" if not fails else "FAIL — " + " / ".join(fails))
 sys.exit(1 if fails else 0)
