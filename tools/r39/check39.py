@@ -48,7 +48,7 @@ for label, pat, mn in [
 print("== ② R39 Phase 표식 ==")
 need = {
     1: [("부활 25% 차감", r"var R39_REVIVE_PENALTY = 0\.25;"), ("버프 칩 바", r'"data-testid": "buff-chips"'), ("아이템 버튼 안 유물 텍스트 없음", None), ("HUD 부활 횟수", r'"부활 ", hud\.continues'), ("DEV r39", r"r39: \(\) => \{")],
-    2: [("난이도 2트랙", r"var R39_MODES = "), ("소프트 캡", r"r39SoftCap"), ("콤보 브레이크", r"R39_COMBO_BREAK"), ("가드 브레이크", r"r39GuardBreak"), ("패링 보상", r"r39ParryReward")],
+    2: [("난이도 2트랙", r"var R39_MODES = "), ("소프트 캡", r"r39SoftCap\(g\.stats, g\.era\)"), ("콤보 브레이크", r"const r39ComboBreak = "), ("가드 브레이크 병종", r"var r39GuardUnit = "), ("패링 반격 창구", r"g\.r39ParryCrit = g\.tick \+ 90"), ("타이틀 모드 선택", r'"data-testid": "mode-select"'), ("HUD 모드 표기", r'"data-testid": "mode-tag"')],
     3: [("STAGES 10", r"var R39_STAGES = "), ("연표 두문자 바", r'"data-testid": "timeline-bar"'), ("시공 순서 봉인", r"SEAL_TRIAL"), ("퀴즈 보강", r"R39_QUIZ_EXTRA")],
     4: [("CHANGELOG 생성은 파일로", None)],
 }
@@ -62,7 +62,7 @@ for ph in range(1, phase + 1):
 
 print("== ③ 크기 ==")
 lines = t.count("\n")
-n39 = len(re.findall(r"\[R39\]", t))
+n39 = len(re.findall(r"\[R39( P\d)?\]", t))
 mb = len(t.encode("utf-8")) / 1e6
 print(f"INFO  index.html {lines}줄 · {mb:.2f}MB · [R39] 표식 {n39}")
 print()

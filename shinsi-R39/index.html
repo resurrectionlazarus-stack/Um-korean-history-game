@@ -2463,6 +2463,50 @@
   // [R38-2B] 주인공 동작 확장 상수 — 방향키 탭 유효 10틱 · 잔심 6틱 · 회피 무적 8틱 · 갈래 잠금 상한 90틱 · 시대별 연참 변주(전진량 · 잔상 · 먼지)
   // [R39] 부활 점수 차감 비율(0으로 되돌리지 않는다)
   var R39_REVIVE_PENALTY = 0.25;
+  // [R39 P2] 난이도 2트랙 — 타이틀에서 고른다(localStorage "shinsi.mode"). 게임 로직은 R39_MODES[R39_MODE]만 본다
+  var R39_MODES = {
+    musou: { key: "musou", name: "무쌍 모드", sub: "스토리 · 초등", tag: "무쌍", hp: 1, dmg: 1, guardDR: 0.5, comboBreak: 40, parryUlt: 25, drop: 1, color: "#f59e0b" },
+    jeongsa: { key: "jeongsa", name: "정사 모드", sub: "D&D2 · 한능검", tag: "정사", hp: 1.2, dmg: 1.25, guardDR: 0.75, comboBreak: 25, parryUlt: 40, drop: 0.6, color: "#a78bfa" }
+  };
+  var R39_MODE = (() => {
+    try {
+      const m = window.localStorage.getItem("shinsi.mode");
+      return R39_MODES[m] ? m : "musou";
+    } catch (e) {
+      return "musou";
+    }
+  })();
+  var r39Mode = () => R39_MODES[R39_MODE] || R39_MODES.musou;
+  var r39SetMode = (m) => {
+    if (!R39_MODES[m]) return R39_MODE;
+    R39_MODE = m;
+    try {
+      window.localStorage.setItem("shinsi.mode", m);
+    } catch (e) {}
+    return R39_MODE;
+  };
+  // [R39 P2] 구역 리듬: Z1 빡빡(D&D2) → Z2 · Z3 폭딜(무쌍) → Z4 보스 패턴
+  var R39_ZONE_K = [{ hp: 1.15, dmg: 1.1 }, { hp: 0.9, dmg: 1 }, { hp: 0.9, dmg: 1 }, { hp: 1, dmg: 1 }];
+  // [R39 P2] 시대별 공격력 소프트 캡 — 다음 시대 진입 때 기준 전투력으로 되돌리되 초과분 15% · 각성 1단계(1.45)만 이월
+  var R39_SOFTCAP = { excessKeep: 0.15, awakenKeep: 1.45 };
+  var r39SoftCap = (st, era) => {
+    const base = 210 + 110 * (era - 1);
+    const before = st.atk;
+    const excess = Math.max(0, st.atk - base);
+    st.atk = base + Math.round(excess * R39_SOFTCAP.excessKeep);
+    st.awakenedTier = Math.min(st.awakenedTier || 1, R39_SOFTCAP.awakenKeep);
+    st.powerAtEraStart = st.atk + st.level * 38;
+    st.r39cap = { era, before, after: st.atk, awaken: st.awakenedTier };
+    return st.r39cap;
+  };
+  // [R39 P2] 콤보 브레이크 · 가드 브레이크 상수
+  var R39_COMBO_BREAK = { window: 90, armor: 48, armorDmg: 0.5, push: 16 };
+  var R39_BREAK_T = 180;
+  var r39GuardUnit = (en) => {
+    if (!en || en.isMidBoss) return false;
+    const S = en.unit ? UNIT_SPECS[en.unit] : null;
+    return !!(en.elite || S && (S.tactic === "shield" || S.tactic === "heavy" || S.mounted) || en.unit && /OFFICER/.test(en.unit));
+  };
   var R38B_DIR_TAP = 10;
   var R38B_HOLD = 6;
   var R38B_DODGE_INV = 8;
@@ -8401,6 +8445,14 @@
     }
     if (!isBoss && !entity.isMidBoss) hpK *= R27_MOB_HP_K;
     hpK *= entity.isMidBoss ? R38_HP_K.mid : isBoss ? R38_HP_K.boss : R38_HP_K.mob; // [R38-2A] 체력 배율(1시대 포함)
+    // [R39 P2] 난이도 모드 × 구역 리듬(보스 · 중간보스는 구역 배율 제외 — 보스전은 패턴으로)
+    {
+      const M9 = r39Mode();
+      const Z9 = isBoss || entity.isMidBoss ? null : R39_ZONE_K[Math.max(0, Math.min(3, zoneIdx || 0))];
+      hpK *= M9.hp * (Z9 ? Z9.hp : 1);
+      dmgK *= M9.dmg * (Z9 ? Z9.dmg : 1);
+      entity.r39k = { mode: M9.key, hp: +(M9.hp * (Z9 ? Z9.hp : 1)).toFixed(3), dmg: +(M9.dmg * (Z9 ? Z9.dmg : 1)).toFixed(3) };
+    }
     entity.maxHp = Math.round(entity.maxHp * hpK);
     entity.hp = entity.maxHp;
     if (typeof entity.speed === "number") entity.speed *= spdK;
@@ -12082,6 +12134,7 @@
     const [quizFeedback, setQuizFeedback] = useState(null);
     const [cutsceneBanner, setCutsceneBanner] = useState(null);
     const [stageToast, setStageToast] = useState(null);
+    const [r39ModeUi, setR39ModeUi] = useState(R39_MODE); // [R39 P2] 타이틀 난이도 선택(표시용)
     const [essenceToast, setEssenceToast] = useState(null);
     const [autoPassQuiz, setAutoPassQuiz] = useState(false);
     const [diffLite, setDiffLiteState] = useState(() => setDiffLite(diffLiteFromQuery()));
@@ -12831,6 +12884,23 @@
       st.ult = Math.min(100, st.ult + PARRY_ULT_GAIN);
       st.score += 500;
       g.parryCount = (g.parryCount || 0) + 1;
+      // [R39 P2] 패링 보상 상향 — 반경 300 경직(기본의 2배) · 가드 브레이크 병종 자세 붕괴 · 각성 게이지 모드별 추가 · 90틱 확정 크리티컬 반격 창구
+      {
+        const M9 = r39Mode();
+        st.ult = Math.min(100, st.ult + M9.parryUlt);
+        g.r39ParryCrit = g.tick + 90;
+        for (let i = 0; i < g.enemies.length; i++) {
+          const en = g.enemies[i];
+          if (en.state === "DYING" || en.state === "SPAWN") continue;
+          if (Math.abs(en.x - p.x) < 300 && Math.abs(en.z - p.z) < 90) {
+            en.hitStun = Math.max(en.hitStun || 0, PARRY_STUN * 2);
+            en.superArmor = 0;
+            if (r39GuardUnit(en)) en.breakT = Math.max(en.breakT || 0, R39_BREAK_T);
+          }
+        }
+        if (g.boss && !g.boss.dying && Math.abs(g.boss.x - p.x) < 300) g.boss.hitStun = Math.max(g.boss.hitStun || 0, 20);
+        addDamagePopup(p.x, p.z, p.y + 96, "반격 창구!", true, `각성 +${M9.parryUlt} · 확정 크리티컬 1.5초`, 0, "#f0abfc");
+      }
       const fx = p.x + p.facing * 30;
       spawnHitSpark(fx, p.z, p.y + 58, true);
       spawnSparks(fx, p.z, p.y + 58, 10, p.facing);
@@ -13009,6 +13079,12 @@
         return;
       }
       const dir = dirOverride !== null ? dirOverride : g.player.facing;
+      // [R39 P2] 콤보 브레이크 · 가드 브레이크 · 패링 반격 창구(피해 배율 · 확정 크리티컬)
+      {
+        const r9 = r39PreHit(g, target, dir, dmgRatio, forceCrit);
+        dmgRatio = r9.ratio;
+        if (r9.crit) forceCrit = true;
+      }
       if (target.guardTimer > 0) {
         if (!forceCrit) {
           const chip = Math.floor((st.atk + st.level * 38) * dmgRatio * 0.1);
@@ -13059,7 +13135,7 @@
       }
       const heavy = isHeavyMob(target);
       const kMul = target.isMidBoss ? 0.25 : heavy ? 0.55 : 1;
-      target.vx = dir * knockX * kMul;
+      if (!(target.superArmor > 0)) target.vx = dir * knockX * kMul; // [R39 P2] 슈퍼아머 중엔 넉백 없음
       // [R27] 4타 피니시 볼링: 살아남은 가벼운 적을 '던진 적'으로 날려 다른 적과 연쇄 충돌(STRIKE!)
       if (g._bowlFin && target.hp > 0 && target !== g.boss && !target.isMidBoss && !heavy && !target.thrown && !target.grabbed) {
         target.vx = dir * Math.max(Math.abs(target.vx), 15);
@@ -13067,7 +13143,7 @@
         target.thrown = { dir, t: 34, hit: [], gen: 1 };
         g.bowlLaunches = (g.bowlLaunches || 0) + 1;
       }
-      if (launchY > 0) {
+      if (launchY > 0 && !(target.superArmor > 0)) { // [R39 P2] 슈퍼아머 중엔 띄우기 없음
         const ly = launchY * (target.isMidBoss ? 0.3 : heavy ? 0.7 : 1);
         target.vy = target.y > 8 ? Math.max(target.vy, ly * 0.88) : ly;
         if (target.state === "KNOCKDOWN") target.state = "ACTIVE";
@@ -13076,7 +13152,7 @@
         target.vy = Math.max(target.vy, 5.6);
       }
       if (target.y > 8) target.juggleT = 26;
-      target.hitStun = Math.max(target.hitStun || 0, target.isMidBoss ? 5 : heavy ? 13 : 24);
+      if (!(target.superArmor > 0)) target.hitStun = Math.max(target.hitStun || 0, target.isMidBoss ? 5 : heavy ? 13 : 24); // [R39 P2] 슈퍼아머 중엔 경직 없음
       target.flashTimer = forceCrit || isCounter ? 6 : 4;
       target.shake = 8;
       target.windupTimer = 0;
@@ -13992,6 +14068,83 @@
     // [R38-2A] 로밍 스폰 — 구역 사이 걷는 구간(1.5배로 늘어난 공백)에 매복 · 증원. 구역 zi(1~3)로 가는 길: 앞 구역 범위 끝 ~ 트리거 사이 비율 지점을 넘으면
     //  오른쪽 화면 밖 증원 2 + 왼쪽 화면 밖 매복 1(동시 로밍 4명 상한). 카메라 잠금 없음 · 격파 수는 그대로 인정(목표에 +21). 1시대는 늑대 · 하이에나.
     // [R38-2B] 피니시 플러리시 — 마지막 타 적중 순간: 잔상 3 · 히트스톱 · 방향 쉐이크 · 줌 1.04(8틱) · 마지막 프레임 6틱 잔심(_r31pose · 기존 자세 고정 기능) · 시대별 고정 풀 FX(할당 0)
+    // [R39 P2] 타격 전처리 — ① 슈퍼아머 중이면 피해 50% ② 같은 적 연속 HIT 수(90틱 창) → 임계면 콤보 브레이크 ③ 가드 브레이크 병종의 정면 평타 경감 / 브레이커면 자세 붕괴 ④ 패링 반격 창구 = 확정 크리티컬
+    const r39PreHit = (g, target, dir, ratio, forceCrit) => {
+      const M9 = r39Mode();
+      const p = g.player;
+      let crit = g.r39ParryCrit > g.tick;
+      if (target.superArmor > 0) ratio *= R39_COMBO_BREAK.armorDmg;
+      if (g.tick - (target._cbT != null ? target._cbT : -999) > R39_COMBO_BREAK.window) target._cbN = 0;
+      target._cbN = (target._cbN || 0) + 1;
+      target._cbT = g.tick;
+      if (target._cbN >= M9.comboBreak && !(target.superArmor > 0) && target.state !== "DYING") r39ComboBreak(g, target, dir);
+      if (r39GuardUnit(target) && !(target.guardTimer > 0)) {
+        const frontal = target.facing === -dir;
+        const src = p._atkSrc;
+        const breaker = !!forceCrit || crit || target.windupTimer > 0 || src === "dash" || src === "upper" || src === "branch" || src === "air" || !frontal || g._r31par;
+        if (target.breakT > 0) {
+          // 자세 붕괴 중: 정상 피해 + 10% 추가
+          ratio *= 1.1;
+        } else if (breaker) {
+          target.breakT = R39_BREAK_T;
+          target.hitStun = Math.max(target.hitStun || 0, 36);
+          target.superArmor = 0;
+          g.r39breaks = (g.r39breaks || 0) + 1;
+          addDamagePopup(target.x, target.z, target.y + 24, "BREAK!", true, !frontal ? "등 뒤" : null, 0, "#fb7185");
+          r38Hfx(23, target.x, target.z, 360, dir, 0, 1.3, "#fb7185", 0);
+          sfx("cutArmor", { v: 0.9 });
+        } else {
+          ratio *= 1 - M9.guardDR;
+          g.r39guarded = (g.r39guarded || 0) + 1;
+          if (g.tick - (target._gdT || -99) > 20) {
+            target._gdT = g.tick;
+            addDamagePopup(target.x, target.z, target.y + 20, "GUARD", false, `정면 −${Math.round(M9.guardDR * 100)}%`, 0, "#94a3b8");
+            spawnSparks(target.x - dir * 14, target.z, target.y + 44, 3, -dir);
+          }
+        }
+      }
+      g.r39last = { unit: target.unit || target.mobRole || (target === g.boss ? "boss" : null), frontal: target.facing === -dir, src: p._atkSrc, ratio: +ratio.toFixed(3), crit, armor: target.superArmor || 0, brk: target.breakT || 0, cb: target._cbN || 0, tick: g.tick };
+      return { ratio, crit };
+    };
+    // 콤보 브레이크 — 붉은 섬광 · 슈퍼아머 48틱 · 주인공을 튕겨내고 곧바로 반격(공격 간격 0 · 예고 짧게)
+    const r39ComboBreak = (g, target, dir) => {
+      const p = g.player;
+      target.superArmor = R39_COMBO_BREAK.armor;
+      target._cbN = 0;
+      target.hitStun = 0;
+      target.vx = 0;
+      target.thrown = null;
+      target.state = target.state === "KNOCKDOWN" ? "ACTIVE" : target.state;
+      if (target.attackCooldown != null) target.attackCooldown = 0;
+      p.vx = -dir * R39_COMBO_BREAK.push;
+      p.flinch = Math.max(p.flinch || 0, 8);
+      if (p.pendingHit && p.pendingHit.cancelable) {
+        p.pendingHit = null;
+        p.attackTimer = 0;
+      }
+      g.flashAlpha = Math.max(g.flashAlpha, 0.35);
+      g.flashColor = "#f43f5e";
+      g.hitStop = Math.max(g.hitStop, 4);
+      addTrauma(0.3);
+      kickDirShake(g, -dir, 7);
+      addDamagePopup(target.x, target.z, target.y + 70, "COMBO BREAK!", true, "슈퍼아머 · 반격", 0, "#f43f5e");
+      r38Hfx(23, target.x, target.z, 480, dir, 0, 1.8, "#f43f5e", 0);
+      r38Hfx(24, target.x, target.z - (target.y || 0) - 50, 180, dir, Math.random() * TAU, 1.6, "#f43f5e", 14);
+      g.r39comboBreaks = (g.r39comboBreaks || 0) + 1;
+      sfx("bossRoar", { v: 0.6, r: 1.3 });
+    };
+    // 틱마다: 슈퍼아머 · 자세 붕괴 타이머
+    const r39TickAll = (g) => {
+      for (let i = 0; i < g.enemies.length; i++) {
+        const e = g.enemies[i];
+        if (e.superArmor > 0) e.superArmor--;
+        if (e.breakT > 0) e.breakT--;
+      }
+      if (g.boss) {
+        if (g.boss.superArmor > 0) g.boss.superArmor--;
+        if (g.boss.breakT > 0) g.boss.breakT--;
+      }
+    };
     const r38bFlair = (g, p, fin) => {
       if (!fin || p.rush || p.plunge) return;
       const era = g.era;
@@ -16205,6 +16358,7 @@
       if (g.era < 6) {
         switchEraDirectly(g.era + 1);
         g.stats.atk += 110;
+        r39SoftCap(g.stats, g.era); // [R39 P2] 시대별 공격력 소프트 캡
         g.stats.hp = g.stats.maxHp;
       } else {
         g.liberated = true;
@@ -16317,7 +16471,7 @@
         spawnPickup(en.x - 20, en.z, "GEM");
         spawnPickup(en.x + 20, en.z, "MEAT");
         spawnPickup(en.x, en.z + 20, "SUB");
-      } else if (Math.random() < 0.6) {
+      } else if (Math.random() < 0.6 * r39Mode().drop) { // [R39 P2] 정사 모드는 드롭 ×0.6(자원 관리)
         g.buffOrbs.push({ x: en.x, z: en.z, anim: 0 });
       }
       spawnShards(en.x, en.z, 28, 12, -en.facing);
@@ -19812,6 +19966,17 @@
             const st = gameRef.current.stats;
             return { penalty: R39_REVIVE_PENALTY, score: st.score, continues: st.continues || 0, lost: st.scoreLostByRevive || 0, chips: !!document.querySelector('[data-testid="buff-chips"]') };
           },
+          // [R39 P2] 검증: 모드 바꾸기 · 밸런스 상태(소프트 캡 · 콤보 브레이크 · 가드 · 패링 창구) · 패링 강제
+          r39mode: (m) => {
+            if (m) r39SetMode(m);
+            return { mode: R39_MODE, cfg: Object.assign({}, r39Mode()) };
+          },
+          r39bal: () => {
+            const g = gameRef.current;
+            const st = g.stats;
+            return { mode: R39_MODE, atk: st.atk, awakenedTier: st.awakenedTier, cap: st.r39cap || null, last: g.r39last || null, comboBreaks: g.r39comboBreaks || 0, breaks: g.r39breaks || 0, guarded: g.r39guarded || 0, parryCritLeft: Math.max(0, (g.r39ParryCrit || 0) - g.tick), zoneK: R39_ZONE_K, enemies: g.enemies.map((e) => ({ unit: e.unit || e.mobRole, hp: e.hp, maxHp: e.maxHp, cb: e._cbN || 0, armor: e.superArmor || 0, brk: e.breakT || 0, k: e.r39k || null })) };
+          },
+          r39parry: () => justParry(),
           r39revive: () => {
             revivePlayer(true);
             return gameRef.current.stats.score;
@@ -21471,6 +21636,7 @@
             triggerEraWeaponCombo();
           }
         }
+        r39TickAll(g); // [R39 P2] 슈퍼아머 · 자세 붕괴 타이머
         if (g.zoneState === "ROAM" || g.zoneState === "GO") {
           if (g.zoneState === "GO") g.goT++;
           if (g.zoneIdx < 4 && p.x > ZONE_TRIG[g.zoneIdx]) engageZone(g.zoneIdx);
@@ -23900,7 +24066,7 @@
           },
           "DEV"
         ))),
-        gameState !== "TITLE" && /* @__PURE__ */ React.createElement("div", { className: "flex items-center justify-between gap-2 bg-slate-900/90 border border-slate-800 rounded-lg px-2.5 py-1 text-[10px] font-black tabular-nums" }, /* @__PURE__ */ React.createElement("span", { className: "text-slate-400" }, "SCORE ", /* @__PURE__ */ React.createElement("span", { className: "text-white" }, hud.score.toLocaleString()), hud.continues > 0 && /* @__PURE__ */ React.createElement("span", { className: "ml-1 text-rose-300" }, "부활 ", hud.continues)), /* @__PURE__ */ React.createElement("span", { className: "text-slate-400" }, "HI ", /* @__PURE__ */ React.createElement("span", { className: "text-amber-300" }, Math.max(hiScore, hud.score).toLocaleString())), /* @__PURE__ */ React.createElement("span", { className: "text-slate-400" }, "\uACA9\uD30C ", /* @__PURE__ */ React.createElement("span", { className: "text-sky-300" }, Math.min(hud.kills, hud.killGoal || eraData.requiredKills), "/", hud.killGoal || eraData.requiredKills)), /* @__PURE__ */ React.createElement("span", { className: "text-rose-400 tracking-tighter", "aria-label": `\uBAA9\uC228 ${hud.lives}` }, "\u2665".repeat(Math.max(0, hud.lives)), /* @__PURE__ */ React.createElement("span", { className: "text-slate-700" }, "\u2665".repeat(Math.max(0, 3 - hud.lives))))),
+        gameState !== "TITLE" && /* @__PURE__ */ React.createElement("div", { className: "flex items-center justify-between gap-2 bg-slate-900/90 border border-slate-800 rounded-lg px-2.5 py-1 text-[10px] font-black tabular-nums" }, /* @__PURE__ */ React.createElement("span", { className: "text-slate-400" }, "SCORE ", /* @__PURE__ */ React.createElement("span", { className: "text-white" }, hud.score.toLocaleString()), hud.continues > 0 && /* @__PURE__ */ React.createElement("span", { className: "ml-1 text-rose-300" }, "부활 ", hud.continues)), /* @__PURE__ */ React.createElement("span", { className: "text-[9px] px-1.5 rounded-full border", style: { color: r39Mode().color, borderColor: r39Mode().color }, "data-testid": "mode-tag" }, r39Mode().tag), /* @__PURE__ */ React.createElement("span", { className: "text-slate-400" }, "HI ", /* @__PURE__ */ React.createElement("span", { className: "text-amber-300" }, Math.max(hiScore, hud.score).toLocaleString())), /* @__PURE__ */ React.createElement("span", { className: "text-slate-400" }, "\uACA9\uD30C ", /* @__PURE__ */ React.createElement("span", { className: "text-sky-300" }, Math.min(hud.kills, hud.killGoal || eraData.requiredKills), "/", hud.killGoal || eraData.requiredKills)), /* @__PURE__ */ React.createElement("span", { className: "text-rose-400 tracking-tighter", "aria-label": `\uBAA9\uC228 ${hud.lives}` }, "\u2665".repeat(Math.max(0, hud.lives)), /* @__PURE__ */ React.createElement("span", { className: "text-slate-700" }, "\u2665".repeat(Math.max(0, 3 - hud.lives))))),
         devMode && /* @__PURE__ */ React.createElement("div", { className: "space-y-1 bg-fuchsia-950/40 border border-fuchsia-500/40 rounded-lg p-1.5" }, /* @__PURE__ */ React.createElement("div", { className: "grid grid-cols-6 gap-1" }, ERAS_DATA.map((eItem) => /* @__PURE__ */ React.createElement(
           "button",
           {
@@ -24116,6 +24282,26 @@
           className: wide ? "flex flex-col items-center justify-center gap-3 text-center z-30" : "flex-1 flex flex-col items-center justify-center gap-3 min-h-[216px] text-center",
           style: wide ? { position: "fixed", left: "50%", bottom: "6%", transform: "translateX(-50%)", width: "min(440px, 80vw)", pointerEvents: "auto" } : void 0
         },
+        /* [R39 P2] 난이도 2트랙 — 무쌍(스토리 · 초등) / 정사(D&D2 · 한능검). 선택은 localStorage에 남는다 */
+        /* @__PURE__ */ React.createElement(
+          "div",
+          { className: "w-full max-w-xs grid grid-cols-2 gap-2", "data-testid": "mode-select" },
+          Object.values(R39_MODES).map((M) => /* @__PURE__ */ React.createElement(
+            "button",
+            {
+              key: M.key,
+              onClick: () => {
+                sfx("ui");
+                setR39ModeUi(r39SetMode(M.key));
+              },
+              "data-mode": M.key,
+              "aria-pressed": r39ModeUi === M.key,
+              className: `py-2 rounded-xl border font-black text-[11px] leading-tight active:scale-95 ${r39ModeUi === M.key ? "bg-slate-100 text-slate-950 border-white" : "bg-slate-900/70 text-slate-300 border-slate-600"}`
+            },
+            /* @__PURE__ */ React.createElement("div", null, M.name),
+            /* @__PURE__ */ React.createElement("div", { className: "text-[9px] font-bold opacity-70" }, M.sub)
+          ))
+        ),
         /* @__PURE__ */ React.createElement(
           "button",
           {
