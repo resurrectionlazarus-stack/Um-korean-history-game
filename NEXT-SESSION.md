@@ -1,5 +1,7 @@
 # 새 방 인수인계서 — R38-1단계 완료 직후
 
+> **[2026-11-28 · R39 메가 라운드 완료 · 브랜치 `r39-mega`]** 최신 빌드는 `shinsi-R39/index.html`(= R38-2B + iOS 핫픽스 + Phase 1~3 패치 · 에셋 변경 없음). 먼저 `R39_CHANGELOG.md`(변경 요약 · 검증 수치) → `R39_ASSET_TODO.md`(신규 스테이지 에셋 발주서) → `HANDOVER.md` 17절을 읽는다. 빌드 점검은 `python -I tools/r39/check39.py shinsi-R39 3` + `python -I tools/r38/guard38.py shinsi-R38-2B shinsi-R39`. master 머지 · 푸시 · zip은 오너가 직접 한다. 아래는 R38-1단계 시점의 안내이며 저장소 구조 · 규칙은 그대로 유효하다.
+
 > 이 저장소를 처음 여는 다음 작업자(AI 에이전트 포함)를 위한 한 장입니다.
 > 읽는 순서: **이 문서 → `HANDOVER.md` 0 · 1 · 7 · 16절 → `R38-handoff.md` → `R37-handoff.md`**. 나머지는 필요할 때 찾아보면 됩니다.
 
