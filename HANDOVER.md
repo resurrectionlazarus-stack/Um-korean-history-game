@@ -4,7 +4,7 @@
 > 이 문서 하나만 읽고 다음 라운드(R34~)를 혼자 돌릴 수 있게 썼습니다.
 > 사람 개발자든 AI 에이전트(Claude 등)든 같은 순서로 따라오면 됩니다.
 > 라운드별 자세한 기록은 `R23-handoff.md` ~ `R36.5-2-handoff.md`에 있습니다(최신 = R36.5-2). 앞으로의 계획은 `ROADMAP.md`.
-> 줄 번호 · 예시 명령은 R33 기준으로 쓴 것이 많습니다. R34에서 달라진 점은 **10절**, R35는 **11절**, R36은 **12절**, R36.5는 **13절**, R36.5-2는 **14절**, R37(새 효과음 엔진)은 **15절**에 모았습니다.
+> 줄 번호 · 예시 명령은 R33 기준으로 쓴 것이 많습니다. R34에서 달라진 점은 **10절**, R35는 **11절**, R36은 **12절**, R36.5는 **13절**, R36.5-2는 **14절**, R37(새 효과음 엔진)은 **15절**, R38-1단계(맵 1.5배 · 과밀 이펙트)는 **16절**에 모았습니다.
 
 ---
 
@@ -13,7 +13,7 @@
 | 항목 | 내용 |
 |---|---|
 | 무엇 | 한국사 6시대 횡스크롤 액션(벨트스크롤) 웹게임. React 18 단일 `index.html` + 원화 · 효과음 `assets/` |
-| 최신 빌드 | `shinsi-R37/` (R36.5-2 + 패치 48곳 · 새 효과음 MP3 64 + 표 · MANIFEST 520항목 — **저장소 미반영**, 15절) · 직전 `shinsi-R36.5-2/`(MANIFEST 455) |
+| 최신 빌드 | **`shinsi-R38/`**(R37 + R38-1 패치 28곳 · 에셋 변경 없음 — 16절) · 직전 `shinsi-R37/` (R36.5-2 + 패치 48곳 · 새 효과음 MP3 64 + 표 · MANIFEST 520항목 — **저장소 미반영**, 15절) · 직전 `shinsi-R36.5-2/`(MANIFEST 455) |
 | 플레이 | **R37 https://claude.ai/artifact/6o4E1jES1aXqxfDCjPE7jc** · R36.5-2 https://claude.ai/artifact/FgvndJmipef8BGKyU82Yvf · R36.5 https://claude.ai/artifact/RxAoQ8Gfhsc5fusv9hGU1d · R36 https://claude.ai/artifact/3aXmHDQY6Xp9afZoqtQAAc · R35 https://claude.ai/artifact/LrkMYxn8GL64Gnz3S5hC3r · R34 https://claude.ai/artifact/MrnPp3LH717EsSYDFqQ3tP · R33 https://claude.ai/artifact/8DRtahb3dDRZLTKh9FyPd5 (비공개 — 오너가 Share 메뉴로 공유) · 음향 점검 https://claude.ai/artifact/QSg43hGAD1mgJALZhnyZMT |
 | 저장소 · 브랜치 | `resurrectionlazarus-stack/Um-korean-history-game` · 작업 브랜치 **`claude/r23-attack-walk-visibility-mob-ocesrz`** (여기에만 커밋 · 푸시) |
 | main 병합 | **하지 않음**(실기기 확인 뒤 오너 지시가 있을 때만) · PR도 요청이 있을 때만 |
@@ -407,6 +407,18 @@ cd tools/r33 && node r33func.js /tmp/r33out 8033 && node load33.js 8033
 - **플레이 링크 게시**: 파일 522개 · 82MB → 세 묶음(`tools/r37/make_batches37.py`).
 - **Windows PC에서 돌릴 때**: `tools/r37/run_py.ps1 <스크립트> [인자]`(Anaconda DLL 경로 · UTF-8 · `-I -X utf8`). node가 없으면 `check_build37.py`가 문법 검사를 건너뛴다 → 브라우저에서 콘솔 에러 0으로 확인.
 
+## 16. R38-1단계에서 달라진 점(R37 내용에 덧붙임)
+
+- **최신 빌드 계보**: `shinsi-R37/index.html` + `python3 -I tools/r38/r38_patch.py <사본>` = `shinsi-R38/index.html`(28곳 · `[R38]` 표식 24). 패치는 `tools/r38/r38_fx.js`(과밀 이펙트 엔진)를 읽어 R31 고정 풀 앞(최상위)과 `r31HitBurst` 앞(App 안)에 넣는다 — 엔진을 고치면 패치를 다시 적용할 것. 에셋 · MANIFEST 변경 없음(520 = 520).
+- **R38은 3단계로 나눠 진행**(오너 지시): 1단계 맵 확장 + 과밀 이펙트 + 60fps 방어(끝) → 2단계 전투 밸런스 + 주인공 동작 다채로움 → 3단계 guard/guardUp/패링 소리 2차 + 6초 부하. ROADMAP의 'R38 3시대 전역'과는 다른 범위.
+- **맵**: `WORLD_WIDTH` 9600(= 6400 × `R38_MAP_K` 1.5) · `ZONE_CAM` [480, 2850, 5100, 8640] · `ZONE_TRIG` = 카메라 + 220/240/250/250 · `SEOKJANGRI_NEO_X` 4500 · `RELIC_ROOMS[*].x` ×1.5. `?map38=1`이면 R37 길이. 배경은 `tile()`이 `camRX` 나머지 연산으로 무한 반복이라 길이와 무관 · groundY(470/600) · horizonY 670 → 335 그대로.
+- **구역 전투 카메라**: Z1~Z3 `ZONE_SPAN` 1440 안에서 주인공 추적(`r38ZoneCam`), 주인공 벽 L+46 ~ L+span-46, 구역 기둥 · 6시대 탐조등 중심도 범위 기준, 스폰 기준점은 지금 카메라(`r38SpawnBase` — `spawnWave` · `spawnStage1MidBoss` · `spawnEraMidBoss`). Z4는 1화면 고정(보스 패턴이 고정 화면 가정).
+- **과밀 이펙트 규칙**(4-3절 보충): 고정 풀 `R38_HFX`(256 · HD 오버레이 · 종류 21~24) · `R38_PART`(384 · 저해상도 · 1 불꽃 · 2 잉크 방울 · 3 불씨) · 프레임 중 할당 0(위치는 t0에서 해석적 계산 · 틱 갱신 없음) · 틱당 예산 `R38_BUDGET` 48/28/14 · 처치는 틱당 3회 별도 · 밀도 계수 k(프레임 EMA · 그리기 ms · 품질 단계) · shadowBlur · filter · 프레임 중 그라디언트 금지 · 글로우는 `getGlowSprite` 캐시 · 종류 × 투명도 묶음 fill/stroke. 켜고 끄기 `?fx38=0/1/2` · 실행 중 `__RELIC_DEV.r38mode(모드, 예산, R38_SKIP)`.
+- **DEV 훅 추가**: `r38()`(맵 상수 · 카메라 · 풀 점유 · 예산 거절 · 밀도 계수 · 그리기 ms `msH/msP` · 주인공 `_assetFrame` · 성능) · `r38mode()`.
+- **보존 검증 도구**: `python3 -I tools/r38/guard38.py <이전 빌드> <새 빌드>` — 권율 걸음걸이 9구간 · era5 스프라이트 · R37 엔진/훅 · assets/sfx · MANIFEST · 고정 상수 해시 비교. 다음 단계에서도 그대로 쓴다(`shinsi-R38 shinsi-R38-2`).
+- **이 PC(built-in 브라우저) 테스트 요령**(7절 보충): 창(pane)이 가려지면 게임이 `document.hidden`으로 자동 일시정지하고 rAF가 멈춘다 → `tools/r38/shim38_console.js`(rAF 하이브리드 대체 · visibilitychange/blur 차단 · setHalt · 틱 기준 대기)를 먼저 붙인 뒤 `func38_console.js` · `load38_console.js`. 부하 수치는 창이 보일 때(실제 rAF · 타이머 콜백 0)만 유효. 같은 빌드도 25~56fps · 11~22ms로 흔들리므로 빌드 비교는 번갈아 반복 · 같은 페이지 A/B(`r38mode`)로. 대기 루프는 10초 상한.
+- **부하 판정**: R38-1은 **조건부 통과**(`R38-handoff.md` 4절 — 이펙트 JS 그리기 0.5ms/프레임 이하 · 켬/끔 차이가 측정 편차 안 · 55fps 미달은 R37도 같은 PC 한계). 정식 판정은 클라우드 하네스 또는 실기기.
+
 ## 9. 라운드 연혁(무엇이 어디서 바뀌었나)
 
 | 라운드 | 커밋 | 요지 |
@@ -427,4 +439,5 @@ cd tools/r33 && node r33func.js /tmp/r33out 8033 && node load33.js 8033
 | R36 | e0cefb0 | 짐승의 기척 · 갈래 기술(오너 직접 피드백): 둔기 타격음 '퍽' 4종 · 짐승 울음 10 · 병사 함성 1 · 연타 갈래 기술 4종(올려치기 · 공중 추격 · 내려찍기 · 관통 돌진) · 오른손 파지 미술 발주서(R36.5에서 철회) |
 | R36.5 | 29564ff | 무기를 쥔 손을 왼손답게(오너 직접 피드백): 무기 그림 9장 — 옛 엄지 지움 · 엄지를 앞에 얹음 · 1시대 손톱. 코드 변경 없음 |
 | R36.5-2 | 02445a0 | 무기를 쥔 손의 비율(오너 직접 피드백): 무기 그림 9장의 손을 몸 원화의 주먹으로 교체(같은 크기) · 1시대 자루 가늘게 · 2 · 4시대 건틀릿 → 맨주먹. 코드 변경 없음. 새 방 인수인계서 `NEXT-SESSION.md` |
-| R37 | (미커밋 — `dist/shinsi-R37-repo-delta.zip`) | 리얼리티 효과음(음향감독 발주서): 녹음 104개 → MP3 64개(트림 · 정규화 · EQ · 심리스 루프 · 파생 4) + Web Audio 엔진 `createR37Sfx`(변주 · 쿨다운 · 패닝 · 덕킹 · 시대별 preload · 디코더 지연 보정) + 연동 48곳(타격 · 기합 · 피격 · 사망 · 적 · 궁수 · 화살비 · 기병 · 부처님). Windows PC에서 제작 · 부하 판정 보류 |
+| R38-1 | 로컬 `d12cab1`(r38-1) · GitHub 백업은 오너가 | 맵 1.5배(월드 9600 · 구역 카메라 · Z1~Z3 1.5화면 추적) · 치트키급 과밀 이펙트 엔진(고정 풀 2 · 틱당 예산 · 밀도 계수 · 타격/처치/각성/구역 훅) · 파티클 상한 ↑ · 보존 검증 guard38 · 콘솔 테스트 shim. 에셋 변경 없음 · 부하 조건부 통과(16절) |
+| R37 | GitHub `r37-sfx` 3c91f96(오너 백업) | 리얼리티 효과음(음향감독 발주서): 녹음 104개 → MP3 64개(트림 · 정규화 · EQ · 심리스 루프 · 파생 4) + Web Audio 엔진 `createR37Sfx`(변주 · 쿨다운 · 패닝 · 덕킹 · 시대별 preload · 디코더 지연 보정) + 연동 48곳(타격 · 기합 · 피격 · 사망 · 적 · 궁수 · 화살비 · 기병 · 부처님). Windows PC에서 제작 · 부하 판정 보류 |
